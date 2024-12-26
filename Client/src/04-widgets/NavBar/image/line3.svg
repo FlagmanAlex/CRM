@@ -1,9 +1,8 @@
 <svg 
     xmlns="http://www.w3.org/2000/svg" 
-    width="20px" 
-    height="20px" 
-    fill="black"
-    stroke="grey"
+    width="15px" 
+    height="10px" 
+    stroke="white"
     class="block fill-none stroke-current"
 >
     <line x1="1" y1="1" x2="15" y2="1" stroke-width="2px"/>

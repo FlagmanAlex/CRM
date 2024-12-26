@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './NavText.css';
 
 interface INavText {
   navigate: string
@@ -14,14 +13,14 @@ export const NavText = ({ navigate, text, subItems } : INavText) => {
   return (
     <div 
     // className='nav-text'
-      className="flex relative flex-row"
+      className="flex z-10 relative flex-row"
       onMouseEnter={() => {console.log(isSubMenuOpen); setIsSubMenuOpen(true)}} // Открывать подпункты при наведении
       onMouseLeave={() => {console.log(isSubMenuOpen); setIsSubMenuOpen(false)}} // Закрывать при выходе мыши
       >
       <Link 
         // className='main-item'
         // onClick={() => {console.log(isSubMenuOpen); setIsSubMenuOpen((prev) => !prev)}}
-        className=" flex-grow p-2 transition-all text-white 
+        className=" flex-grow z-10 p-2 transition-all text-white 
           text-sm hover:bg-stone-500"
         to={navigate} 
       >
@@ -31,7 +30,7 @@ export const NavText = ({ navigate, text, subItems } : INavText) => {
         <div 
           // className={`sub-menu ${isSubMenuOpen ? 'open' : ''}`}
           className={`absolute top-0 left-full flex-col
-             bg-stone-600 z-50  transition-all
+             bg-stone-600 z-10  transition-all
             ${isSubMenuOpen ? 'visible flex' : 'hidden'}`}
         >
           {subItems.map((subItem, index) => (

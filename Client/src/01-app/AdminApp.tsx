@@ -1,6 +1,6 @@
 import React from 'react'
 //import s from './AdminApp.module.css'
-import { NavBar } from '../04-widgets/NavBar'
+import { NavBar } from '../04-widgets/NavBar/NavBar'
 import { Router } from './Router'
 
 interface INavText {
