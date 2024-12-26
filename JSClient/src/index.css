@@ -1,0 +1,12 @@
+:root {
+    --vitamin-color: #afa;
+    --parfum-color: #aaf;
+    --sportpit-color: #aff;
+    --cosmetic-color: #faf;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    background-color: white;
+}

@@ -1,0 +1,31 @@
+.FormVitamin {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.button {
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0px 0px 12px #ccc;
+    background-color: #0e0;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.1s ease;
+    font-weight: 700;
+    user-select: none;
+}
+.button:hover {
+
+    background-color: #0f0;
+}
+.button:active {
+    box-shadow: 0px 0px 0px #ccc;
+    transform: scale(0.97);
+    background-color: #0d0;
+}
+.name {
+    text-align: left;
+    max-width: 400px;
+}

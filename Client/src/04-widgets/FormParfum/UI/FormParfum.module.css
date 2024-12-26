@@ -1,0 +1,46 @@
+.NewParfum {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.ButtonBlock {
+    display: flex;
+    flex-direction: row;
+    /* max-width: 800px; */
+    gap: 10px;
+    justify-content: space-evenly;
+}
+.Image {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 20px;
+
+}
+.uploadFile {
+    height: 100px;
+    max-width: 100px;
+    align-content: center;
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px;
+    user-select: none;
+    cursor: pointer;
+}
+.ImagePrew {
+    position: relative;
+}
+.DelImage {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    top: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M 20,20 L 80,80 M 80,20 L 20, 80" stroke="white" stroke-linecap="round" stroke-width="15"/></svg>');
+    right: 0;
+    z-index: 100;
+    cursor: pointer;
+    border-radius: 3px;
+}

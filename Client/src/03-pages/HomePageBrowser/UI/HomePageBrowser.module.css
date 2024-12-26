@@ -1,0 +1,59 @@
+.HomePageBrowser {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../../assets/VitaminsSky.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    user-select: none;
+    z-index: -1;
+}
+.HomePageBrowser img {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 20px;
+}
+
+.MirVitaminOK {
+    display: inline-block;
+    transform: skew(10deg, -10deg);
+    /* transform: matrix(1, 0.5, -0.5, 1, 50, 100); */
+    transform-origin: 100px;
+    font-size: 10vw;
+    font-family: rubik;
+    font-weight: 800;
+    background: radial-gradient(circle, #fffb00, #ff9100, #ff0000, #ae00ff, #2f00ff);
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    text-shadow: #2f00ff #2f00ff ;
+}
+.Link {
+    text-decoration: none;
+    font-family: rubik;
+    font-weight: 600;
+    font-size: larger;
+    /* border: 1px #6d6d6d solid; */
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                0 1px 3px rgba(255, 255, 255, 0.1) inset;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 50px;
+    padding: 15px 40px 15px 40px;
+    /* background-color: rgba(255, 255, 255, 0.2); */
+    transition: all 0.3s ease;
+}
+.Link:hover {
+transform: scale(1.05);
+}
+.Link:active {
+    transform: scale(0.95);
+}

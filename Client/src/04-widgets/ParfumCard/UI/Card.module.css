@@ -1,0 +1,103 @@
+.Card {
+    /* border-top: 0.5px dashed; */
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: space-around;
+    border-color: #999;
+    color: #053468;
+    max-width: 400px;
+    max-height: 340px;
+    /* border-radius: 10px; */
+    padding: 10px;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    
+}
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 5px;
+    font-family: 'Scada', sans-serif;
+    font-size: 0.7rem;
+    line-height: 100%;
+}
+.LogoFMH {
+    position: absolute;
+    z-index: 2;
+    opacity: 50%;
+    margin-left: 120px;
+    margin-top: -10px;
+    /* margin-top: 5px; */
+}
+.LeftColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* align-self: center; */
+    justify-content: space-around;
+    padding-top: 10px;
+    
+}
+.RigthColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* align-self: center; */
+    /* width: 150px; */
+    justify-content: space-around;
+}
+.OriginFor {
+    /* margin-top: 10px; */
+    /* font-family: 'Scada', sans-serif; */
+    font-family: 'Abril Fatface', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+.parfumFor {
+    font-family: 'Pacifico', cursive;
+
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 130%;
+}
+.description {
+    align-items: center;
+    font-family: 'Scada';
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-align: center;
+}
+.BolderLarge {
+    font-family: 'Rubik Mono One', monospace;
+    font-weight: bolder;
+    font-size: 0.8rem;
+    width: 100%;
+    text-align: center;
+}
+.HeadLine {
+    font-family: 'Scada', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    line-height: 100%;
+}
+.Article {
+    font-family: 'Rubik Mono One';
+    font-size: 1.2rem;
+    font-weight: 100;
+    /* line-height: 100%; */
+}
+.Edit{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    cursor: pointer;
+}

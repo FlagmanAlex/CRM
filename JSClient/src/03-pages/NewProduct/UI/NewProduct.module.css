@@ -1,0 +1,24 @@
+.NewProduct {
+    
+}
+
+.tabs {
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 10px;
+    margin: 0;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.vitamins {
+    background-color: var(--vitamin-color);
+}
+.sportpits {
+    background-color: var(--sportpit-color);
+}
+.cosmetics {
+    background-color: var(--cosmetic-color);
+}
+.parfums {
+    background-color: var(--parfum-color);
+}
