@@ -4,7 +4,7 @@ import { NavBar } from '../04-widgets/NavBar/NavBar'
 import { Router } from './Router'
 
 interface INavText {
-  navigate: string
+  navigate?: string
   text: string
   subItems: {navigate: string, text: string}[]
 }
@@ -19,14 +19,12 @@ export const AdminApp:React.FC = () => {
         {text: 'Витамины', navigate: 'mvok/cards/vitamins'},
         {text: 'Парфюмерия', navigate: 'mvok/cards/parfums'}
       ], 
-      navigate: ''
     },
     {
       text: 'Каталог',
       subItems: [
         {text: 'Клиенты', navigate: 'ozon/catalog/clients'}
       ],
-      navigate: ''
     },
     {
       text: 'Новая карточка', 
@@ -35,7 +33,12 @@ export const AdminApp:React.FC = () => {
     {
       text: 'Парфюм', 
       subItems: [],
-      navigate: '/parfum'
+      navigate: '/mvok/cards/parfum'
+    },
+    {
+      text: 'Журнал', 
+      subItems: [],
+      navigate: '/journal'
     },
   ];
 

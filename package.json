@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "cd server && npm run dev"
+    "start": "cd server && npm run dev",
+    "dev": "cd Native && npm run start",
+    "server": "cd server && npm run server"
   },
   "keywords": [],
   "author": "",

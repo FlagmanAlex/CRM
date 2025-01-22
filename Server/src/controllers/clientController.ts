@@ -2,12 +2,12 @@ import { Client } from '../models/client.model'
 import { Response, Request } from 'express'
 
 export const getClients = async (req: Request, res: Response) => {
-
     try {
         const response = await Client.find()
         res.status(200).json(response)
     } catch (error) {
         console.error((error as NodeJS.ErrnoException).message);        
+        res.status(500).json({message: 'Ошибка сервера. попробуйте позже'})
     }
 }
 export const getClient = async (req: Request, res: Response) => {
@@ -28,7 +28,7 @@ export const createClient = async (req: Request, res: Response) => {
     try {
         const newClient = new Client(req.body)
         const saveClient = await newClient.save()
-        res.status(200).json(saveClient)
+        res.status(201).json(saveClient)
         
     } catch (error) {
         console.log('Ошибка базы данных', error)
@@ -43,7 +43,7 @@ export const deleteClient = async (req: Request, res: Response) => {
         if (!deletedClient) {
             res.status(404).json({message: "Клиент не найден"})
         }
-        res.status(200).json({message: "Клиент удален"})
+        res.status(204).json({message: "Клиент удален"})
         
     } catch (error) {
         console.log('Ошибка базы данных', error)

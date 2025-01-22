@@ -22,6 +22,7 @@ const fileRoute_1 = __importDefault(require("./src/routes/fileRoute"));
 const userRoute_1 = __importDefault(require("./src/routes/userRoute"));
 const authRoute_1 = __importDefault(require("./src/routes/authRoute"));
 const clientRoute_1 = __importDefault(require("./src/routes/clientRoute"));
+const orderRoutes_1 = __importDefault(require("./src/routes/orderRoutes"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
@@ -49,6 +50,7 @@ app.use('/api/file', fileRoute_1.default);
 app.use('/api/user', userRoute_1.default);
 app.use('/api/auth', authRoute_1.default);
 app.use('/api/client', clientRoute_1.default);
+app.use('/api/order', orderRoutes_1.default);
 const port = process.env.port || 5001;
 app.listen(port, () => console.log(`Сервер запущен на ${port} порту`));
 bot.onText(/\/start (.+)/, (msg, match) => {

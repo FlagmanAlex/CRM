@@ -9,6 +9,7 @@ import { NewProduct } from '../03-pages/NewProduct'
 import { FormParfum } from '../04-widgets/FormParfum'
 import { HomePageBrowser } from '../03-pages/HomePageBrowser'
 import { CatalogClients } from '../03-pages/CatalogClients'
+import { Journal } from '../03-pages/Journal'
 
 export const Router:React.FC = () => {
   return (
@@ -22,6 +23,7 @@ export const Router:React.FC = () => {
         <Route path='/documents' element={<DocumentsPage />} />
         <Route path='/home' element={<HomePageBrowser />} />
         <Route path='/ozon/catalog/clients' element={<CatalogClients/>} />
+        <Route path='/journal' element={<Journal/>} />
     </Routes>
   )
 }

@@ -14,8 +14,8 @@ export const NavText = ({ navigate, text, subItems } : INavText) => {
     <div 
     // className='nav-text'
       className="flex z-10 relative flex-row"
-      onMouseEnter={() => {console.log(isSubMenuOpen); setIsSubMenuOpen(true)}} // Открывать подпункты при наведении
-      onMouseLeave={() => {console.log(isSubMenuOpen); setIsSubMenuOpen(false)}} // Закрывать при выходе мыши
+      onMouseEnter={() => setIsSubMenuOpen(true)} // Открывать подпункты при наведении
+      onMouseLeave={() => setIsSubMenuOpen(false)} // Закрывать при выходе мыши
       >
       <Link 
         // className='main-item'

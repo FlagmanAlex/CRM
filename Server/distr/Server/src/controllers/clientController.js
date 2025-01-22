@@ -18,6 +18,7 @@ const getClients = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     catch (error) {
         console.error(error.message);
+        res.status(500).json({ message: 'Ошибка сервера. попробуйте позже' });
     }
 });
 exports.getClients = getClients;
@@ -41,7 +42,7 @@ const createClient = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const newClient = new client_model_1.Client(req.body);
         const saveClient = yield newClient.save();
-        res.status(200).json(saveClient);
+        res.status(201).json(saveClient);
     }
     catch (error) {
         console.log('Ошибка базы данных', error);
@@ -57,7 +58,7 @@ const deleteClient = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         if (!deletedClient) {
             res.status(404).json({ message: "Клиент не найден" });
         }
-        res.status(200).json({ message: "Клиент удален" });
+        res.status(204).json({ message: "Клиент удален" });
     }
     catch (error) {
         console.log('Ошибка базы данных', error);

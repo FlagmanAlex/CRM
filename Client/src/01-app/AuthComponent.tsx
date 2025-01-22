@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { handleError } from '../../../07-shared/handleError'
+import { handleError } from '../07-shared/handleError'
 //import { BrowserApp } from '../../BrowserApp'
-import { HomePageBrowser } from '../../../03-pages/HomePageBrowser'
-import { AdminApp } from '../../AdminApp'
+import { HomePageBrowser } from '../03-pages/HomePageBrowser'
+import { AdminApp } from './AdminApp'
 import axios from 'axios'
 
 export const AuthComponent:React.FC = () => {

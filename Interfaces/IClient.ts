@@ -4,6 +4,6 @@ export interface IClient {
     gender: string
     phone: string
     address: string
-    GPS: string
+    gps: string
     percent: number
 }

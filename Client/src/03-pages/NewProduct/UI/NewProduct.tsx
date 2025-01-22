@@ -5,8 +5,9 @@ import { FormParfum } from '../../../04-widgets/FormParfum';
 
 
 export const NewProduct = () => {
+
   return (
-    <div className={s.NewProduct}>
+    <div className={``}>
       <ConfigProvider
         theme={{
           components: {
@@ -26,7 +27,7 @@ export const NewProduct = () => {
           
           items={[
             {
-              label: <span className={`${s.tabs} ${s.vitamins}`}>Витамины</span>,
+              label: <span className={`${`s.tabs`} ${s.vitamins}`}>Витамины</span>,
               key: '1',
               children: <FormVitamin />,
             },

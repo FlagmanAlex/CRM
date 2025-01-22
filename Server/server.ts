@@ -8,6 +8,7 @@ import fileRoute from './src/routes/fileRoute'
 import userRoute from './src/routes/userRoute'
 import authRoute from './src/routes/authRoute'
 import clientRoute from './src/routes/clientRoute'
+import orderRoute from './src/routes/orderRoutes'
 
 import bodyParser from 'body-parser'
 import cors from 'cors'
@@ -46,6 +47,7 @@ app.use('/api/user', userRoute)
 
 app.use('/api/auth', authRoute)
 app.use('/api/client', clientRoute)
+app.use('/api/order', orderRoute)
 
 const port = process.env.port || 5001
 

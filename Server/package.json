@@ -6,7 +6,9 @@
     "start": "node server.js",
     "server": "nodemon ./distr/Server/server.js",
     "client": "npm run dev --prefix ../Client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "android":"npm run start --prefix ../Native",
+    "devAndr":"concurrently \"npm run server\" \"npm run android\""
   },
   "proxy": "127.0.0.1",
   "keywords": [],
