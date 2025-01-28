@@ -1,15 +1,14 @@
 import React from 'react'
-import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Modal, StyleSheet, TextInput, View } from 'react-native'
 import { IClient } from '../../../../Interfaces/IClient'
-import { STYLE, THEME } from '../../Default'
+import { THEME } from '../../Default'
 import { FormLayout } from '../../shared/FormLayout'
-import { Button } from '../../shared/Button'
-import { AntDesign } from '@expo/vector-icons'
-import { ButtonApply } from '../Buttons/ButtonApply'
-import { ButtonDelete } from '../Buttons/ButtonDelete'
-import { ButtonBack } from '../Buttons/ButtonBack'
+import { ButtonApply } from '../../shared/Buttons/ButtonApply'
+import { ButtonDelete } from '../../shared/Buttons/ButtonDelete'
+import { ButtonBack } from '../../shared/Buttons/ButtonBack'
 
 interface ClientFormProps {
+    openModal: boolean
     client: IClient
     onClose: () => void
     onChange: (field: keyof IClient, value: string | number) => void
@@ -17,7 +16,7 @@ interface ClientFormProps {
     onDelete: () => void
 }
 
-export const ClientForm = ({ onChange, client, onClose, onSave, onDelete }: ClientFormProps) => {
+export const ClientFormModal = ({ onChange, client, onClose, onSave, onDelete, openModal }: ClientFormProps) => {
 
     const fields = [
         { key: "name", placeholder: "Имя", value: client.name, keyboardType: "default" as const, multiline: false },
@@ -28,7 +27,9 @@ export const ClientForm = ({ onChange, client, onClose, onSave, onDelete }: Clie
         { key: "GPS", placeholder: "GPS", value: client.gps, keyboardType: "default"  as const, multiline: false  },
     ];
 
+    
   return (
+    <Modal visible={openModal}>
         <FormLayout headerText={`Клиент ${client.name}`} onClose={onClose}>
             <View style={style.content}>
                 {fields.map((field, index) => (
@@ -50,6 +51,7 @@ export const ClientForm = ({ onChange, client, onClose, onSave, onDelete }: Clie
                 <ButtonBack onPress={onClose} />
             </View>
         </FormLayout>
+    </Modal>
   )
 }
 

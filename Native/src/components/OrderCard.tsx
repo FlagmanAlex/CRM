@@ -1,40 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IOrderList } from '../../../Interfaces/IOrderList'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { OrderForm } from './modals/OrderForm'
 
 interface IOrderCardProps {
     order: IOrderList
-    selectOrder: (order: IOrderList) => void
 }
 
 
-export const OrderCard = ({ order, selectOrder }: IOrderCardProps) => {
-    
+export const OrderCard = ({ order }: IOrderCardProps) => {
+
     const deliverySumm = Math.round(order.priceSum * order.percent / 100)
     const paySum = Math.round(order.priceSum * (order.percent / 100 + 1))
 
-    return (
-        <TouchableOpacity onPress={() => selectOrder(order)}>
-            <View style={style.content}>
-                <View style={style.titleBlock}>
-                    <Text style={{...style.text, width: '10%'}}>{order.orderNum}</Text>
-                    <Text style={{...style.text, width: '25%'}}>{new Date(order.date).toLocaleDateString()}</Text>
-                    <Text 
-                        style={[style.text, {fontWeight: 600, width: '50%', }]} 
-                        numberOfLines={1}
-                    >
-                        {order.clientName}
-                    </Text>
-                    <Text style={style.text}>{`${order.percent}%`}</Text>
-                </View>
-                <View style={style.calculationBlock}>
-                    <Text >{`Заказ: ${order.priceSum}`}</Text>
-                    <Text >{`Доставка: ${deliverySumm}`}</Text>
-                    <Text >{`К оплате: ${paySum}`}</Text>
+    const [openModal, setOpenModal] = useState(false)
 
+    const handleClose = () => {
+        setOpenModal(false)
+    }
+
+    return (
+        <>
+            <TouchableOpacity onPress={() => setOpenModal(true)}>
+                <View style={style.content}>
+                    <View style={style.titleBlock}>
+                        <Text style={{ ...style.text, width: '10%' }}>{order.orderNum}</Text>
+                        <Text style={{ ...style.text, width: '25%' }}>{new Date(order.date).toLocaleDateString()}</Text>
+                        <Text
+                            style={[style.text, { fontWeight: 600, width: '50%', }]}
+                            numberOfLines={1}
+                        >
+                            {order.clientName}
+                        </Text>
+                        <Text style={style.text}>{`${order.percent}%`}</Text>
+                    </View>
+                    <View style={style.calculationBlock}>
+                        <Text >{`Заказ: ${order.priceSum}`}</Text>
+                        <Text >{`Доставка: ${deliverySumm}`}</Text>
+                        <Text >{`К оплате: ${paySum}`}</Text>
+
+                    </View>
                 </View>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+            {order ?
+                <Modal visible={openModal}>
+                    <OrderForm
+                        order={order}
+                        onClose={handleClose}
+                    />
+                </Modal>
+                : null}
+        </>
     )
 }
 

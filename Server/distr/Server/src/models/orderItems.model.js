@@ -39,7 +39,7 @@ const OrderItemsSchema = new mongoose_1.Schema({
     orderId: { type: mongoose_1.default.Schema.ObjectId, ref: 'Order', required: true },
     pvzId: { type: mongoose_1.default.Schema.ObjectId, ref: 'PVZ', required: true },
     courierNumber: { type: Number, required: true },
-    name: { type: String, required: true },
+    item: { type: String, required: true },
     url: { type: String, required: false },
     dateTo: { type: Date, required: true },
     quantity: { type: Number, required: true },

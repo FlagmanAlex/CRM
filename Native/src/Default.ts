@@ -2,15 +2,15 @@ import { StyleSheet } from "react-native"
 
 const color = {
     black: '#000',
-    red: '#f00',
-    green: '#0f0',
-    blue: '#00f',
+    red: '#ad0000',
+    green: '#007c00',
+    blue: '#0000aa',
     grey: '#aaa',
     lightBlue: '#ADD8E6',
     skyBlue: '#87CEEB',
     steelBlue: '#4682B4',
     yellow: '#ff0',
-    amberYellow: '#FFBF00',
+    amberYellow: '#ebb000',
     nightBlue: '#08004d',
     pinks: '#b200f8'
 
@@ -26,7 +26,7 @@ export const THEME = {
         wb: color.pinks
     },
     button: {
-        apply: color.blue,
+        apply: color.green,
         delete: color.red,
         cancel: color.amberYellow,
     }

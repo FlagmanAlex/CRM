@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, Dimensions, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import axios from 'axios'
 import { IOrderList } from '../../../../Interfaces/IOrderList'
 import { OrderCard } from '../OrderCard'
 import { TextField } from '../../shared/TextField'
 import { SETTINGS, THEME } from '../../Default'
-import { OrderForm } from '../forms/OrderForm'
+import { IOrderItem } from '../../../../Interfaces/IOrderItem'
+import { useContextData } from '../../ContextProvider'
+
 
 export const OrderScreen = () => {
 
@@ -14,38 +16,25 @@ export const OrderScreen = () => {
     const [endDate, setEndDate] = useState<Date>(new Date())
     const [showStartDate, setShowStartDate] = useState<boolean>(false)
     const [showEndDate, setShowEndDate] = useState<boolean>(false)
-    const [orders, setOrders] = useState<IOrderList[]>([])
     const [searchText, setSearchText] = useState('')
     const [filterOrder, setFilterOrder] = useState<IOrderList[]>([])
-    const [selectOrder, setSelectOrder] = useState<IOrderList>()
-    const [openModal, setOpenModal] = useState(false)
 
-    const handleFieldChange = (field: keyof IOrderList, value: string | number) => {
-        setSelectOrder(prev => (prev ? {...prev, [field]: value} : undefined))
-    }
-    const closeClientForm = () => {
-        setOpenModal(false)
-    }
-
-    const selectOrderHandler = (order: IOrderList) => {
-        setSelectOrder(order)
-        setOpenModal(true)
-    }
-
+    const { orders, setOrders } = useContextData()
+    
     const server = `${SETTINGS.host}:${SETTINGS.port}`
 
-    const onChangeStartDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    const handleChangeStartDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate
         setShowStartDate(false);
         setStartDate(currentDate);
     };
-    const onChangeEndDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    const handleChangeEndDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate
         setShowEndDate(false);
         setEndDate(currentDate);
     };
 
-    const filterChangeString = (filterString: string) => {
+    const handlefilterString = (filterString: string) => {
         setSearchText(filterString)
         setFilterOrder(
             orders.filter(item => 
@@ -95,7 +84,7 @@ export const OrderScreen = () => {
                             }}
                             value={startDate}
                             mode="date"
-                            onChange={onChangeStartDate}
+                            onChange={handleChangeStartDate}
                             
                         />
                     )}
@@ -105,7 +94,7 @@ export const OrderScreen = () => {
                     {showEndDate && (
                         <DatePicker
                             value={endDate}
-                            onChange={onChangeEndDate}
+                            onChange={handleChangeEndDate}
                         />
                     )}
                 </View>
@@ -113,33 +102,24 @@ export const OrderScreen = () => {
                     <TextField 
                         placeholder='Введите имя клиента'
                         value={searchText}
-                        onChangeText={filterChangeString}
+                        onChangeText={handlefilterString}
                     ></TextField>
                 </View>
             </View>
             <ScrollView style={style.scrollLayout}>
                 {orders.length > 0 ?
-                orders.filter((order => 
-                order.clientName && 
-                order.clientName
+                orders.filter((orderf => 
+                orderf.clientName && 
+                orderf.clientName
                   .toLocaleLowerCase()
                   .includes(searchText
                   .toLocaleLowerCase())))
   
                     .map((order) => (
-                        <OrderCard key={order._id} order={order} selectOrder={selectOrderHandler} />
+                        <OrderCard key={order._id} order={order} />
                     )
                 ) : <Text>Нет заказов в выбранном периоде</Text>}
             </ScrollView>
-            <Modal 
-                visible={openModal}
-            >
-                
-                <OrderForm 
-                    onClose={closeClientForm}
-                    order={selectOrder}
-                />
-            </Modal>
         </View>
     )
 }

@@ -9,6 +9,7 @@ const router = express_1.default.Router();
 router.get('/', orderController_1.getOrders);
 router.get('/:id', orderController_1.getOrder);
 router.get('/items/:id', orderController_1.getOrderItems);
+router.put('/items/:id', orderController_1.updateOrderItem);
 // router.post('/:id', createOrder)
 // router.put('/:id', updateOrder)
 // router.delete('/:id', deleteOrder)

@@ -1,14 +1,17 @@
 import React from 'react'
-import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, KeyboardType, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import { THEME } from '../Default'
+import { FontAwesome } from "@expo/vector-icons";
 
 interface TextFieldProps {
     onChangeText: (text: string) => void | undefined
-    value?: string | undefined
+    value?: string | number | Date| undefined
     placeholder: string
+    keyboardType?: KeyboardType
+    multiline?: boolean
 }
 
-export const TextField = ({ onChangeText, value, placeholder } : TextFieldProps ) => {
+export const TextField = ({ onChangeText, value, placeholder, keyboardType = 'default' } : TextFieldProps ) => {
 
     return (
         <View style={style.searchPanel}>
@@ -17,10 +20,19 @@ export const TextField = ({ onChangeText, value, placeholder } : TextFieldProps 
                     style={style.textInput}
                     onChangeText={text => onChangeText(text)}
                     placeholder={placeholder}
-                    value={value}
+                    value={value?.toString()}
+                    keyboardType={keyboardType}
+                    autoCapitalize={keyboardType === 'url' ? 'none' : 'characters'}
+                    multiline={true}
                 />
                 <TouchableOpacity onPress={() => onChangeText('')}>
-                    <Image style={{ width: 30, height: 30 }} source={require('../../assets/Close.png')} />
+                    {
+                        value ? (
+                            <View style={{ padding: 5 }}>
+                                <FontAwesome name='close' size={30}/>
+                            </View>
+                        ) : ( null )
+                    }
                 </TouchableOpacity>
             </View>
         </View>
@@ -30,7 +42,7 @@ export const TextField = ({ onChangeText, value, placeholder } : TextFieldProps 
 const style = StyleSheet.create({
     searchPanel: {
         // backgroundColor: THEME.color.main,
-        padding: 10,
+        padding: 5,
         flexDirection: 'row'
       },
       panelInput: {
@@ -47,6 +59,7 @@ const style = StyleSheet.create({
         borderColor: THEME.color.grey,
         // borderStyle: 'solid',
         fontSize: 20,
+        width: '90%'
       },
     
 })

@@ -1,13 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose"
-import { IOrderItems } from '../../../Interfaces/IOrderItems'
+import { IOrderItem } from '../../../Interfaces/IOrderItem'
 
-interface IOrderItemsModel extends Omit<IOrderItems, "_id">, Document {}
+interface IOrderItemsModel extends Omit<IOrderItem, "_id">, Document {}
 
 const OrderItemsSchema: Schema = new Schema({
     orderId: { type: mongoose.Schema.ObjectId, ref: 'Order', required: true }, 
     pvzId: { type: mongoose.Schema.ObjectId, ref: 'PVZ', required: true },
     courierNumber: { type: Number, required: true },
-    name: { type: String, required: true },
+    item: { type: String, required: true },
     url: {type: String, required: false},
     dateTo: { type: Date, required: true },
     quantity: { type: Number, required: true },

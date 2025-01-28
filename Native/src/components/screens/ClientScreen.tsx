@@ -3,7 +3,7 @@ import { Alert, FlatList, Modal, ScrollView, StyleSheet, View } from 'react-nati
 import axios from 'axios'
 import { IClient } from '../../../../Interfaces/IClient'
 import { ClientCard } from '../ClientCard'
-import { ClientForm } from '../forms/ClientForm'
+import { ClientFormModal } from '../modals/ClientFormModal'
 import { TextField } from '../../shared/TextField'
 import { SETTINGS } from '../../Default'
 
@@ -109,19 +109,14 @@ export const ClientScreen = () => {
             />
             ) : null}
             {selectClient ? 
-                <Modal 
-                  visible={openModal}
-                  animationType='none'
-                  hardwareAccelerated={true}
-                >
-                    <ClientForm 
+                    <ClientFormModal 
+                        openModal={openModal}
                         onChange={handleFieldChange} 
                         client={selectClient} 
                         onClose={closeClientForm} 
                         onDelete={handleDeleteClient}
                         onSave={handleSaveClient}
                     />
-                </Modal>
             : null}
     </View>
   )

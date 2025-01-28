@@ -1,28 +1,28 @@
 import React, { useState } from 'react'
-import { IOrderItems } from '../../../Interfaces/IOrderItems'
+import { IOrderItem } from '../../../Interfaces/IOrderItem'
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { THEME } from '../Default'
-import { IOrderList } from '../../../Interfaces/IOrderList'
-import { OrderItemsCardModal } from './modals/OrderItemsCardModal'
+import { OrderItemForm } from './modals/OrderItemForm'
 
 interface IOrderItemCardProps {
-    orderItem: IOrderItems
-    order: IOrderList
+    orderItem: IOrderItem
+    percent: number
 }
 
 
-export const OrderItemCard = ({ orderItem, order }: IOrderItemCardProps) => {
+export const OrderItemCard = ({ orderItem, percent }: IOrderItemCardProps) => {
 
-    const orderSum = Math.round((orderItem.quantity * orderItem.price) * order.percent / 100)
+    const orderSum = Math.round((orderItem.quantity * orderItem.price) * percent / 100)
     const [openModal, setOpenModal] = useState(false)
 
     const handleClose = () => {
         setOpenModal(false)
     }
 
+
     return (
         <>
-            <TouchableOpacity onPress={() => setOpenModal(true)}>
+            <TouchableOpacity onPress={() => setOpenModal(true)} >
                 <View style={style.content}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ fontSize: 20, width: '80%' }}>{orderItem.item}</Text>
@@ -44,7 +44,15 @@ export const OrderItemCard = ({ orderItem, order }: IOrderItemCardProps) => {
                     <Text>{`Доставка до ${new Date(orderItem.dateTo).toLocaleDateString()}`}</Text>
                 </View>
             </TouchableOpacity>
-            <OrderItemsCardModal onClose={handleClose} openModal={openModal} />
+            {orderItem ? (
+                <Modal visible={openModal}>
+                    <OrderItemForm
+                        orderItem={orderItem}
+                        onClose={handleClose} 
+                    />
+                </Modal>
+            ) : null
+            }
         </>
     )
 }

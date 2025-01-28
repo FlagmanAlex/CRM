@@ -11,7 +11,8 @@ export const ButtonBack = ({ onPress } : ButtonProps) => {
   return (
     <TouchableNativeFeedback onPress={onPress}>
         <View style={style.button}>
-            <Text style={style.text}><AntDesign name='back' size={30}/></Text>
+                <AntDesign name='back' size={30} color={THEME.color.white}/>
+            <Text style={style.text}></Text>
         </View>
     </TouchableNativeFeedback>
   )
@@ -20,15 +21,20 @@ export const ButtonBack = ({ onPress } : ButtonProps) => {
 const style = StyleSheet.create({
     button: {
         // flex: 1,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
+        flexDirection: 'row',
+        padding: 10,
         justifyContent: 'center',
+        alignContent: 'center',
+        // gap: 5,
         borderRadius: 30,
         backgroundColor: THEME.button.cancel,
         
     },
     text: {
-        color: THEME.color.white
-
+        color: THEME.color.white,
+        fontWeight: 600,
+        fontSize: 17,
+        textTransform:'uppercase'
+        
     }
 })

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOrderItems = exports.getOrder = exports.getOrders = void 0;
+exports.updateOrderItem = exports.getOrderItems = exports.getOrder = exports.getOrders = void 0;
 const order_model_1 = require("../models/order.model");
 const orderItems_model_1 = require("../models/orderItems.model");
 const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -118,6 +118,24 @@ const getOrderItems = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getOrderItems = getOrderItems;
+const updateOrderItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.body);
+        const updateOrderItem = yield orderItems_model_1.OrderItems.findByIdAndUpdate(req.params.id, req.body, {
+            new: true
+        });
+        if (!updateOrderItem) {
+            res.status(404).json({ message: "Item элемент не найден" });
+        }
+        res.status(200).json(updateOrderItem);
+        console.log("UpdateOrderItem");
+    }
+    catch (error) {
+        console.log('Ошибка обновления позиции item', error);
+        res.status(500).json({ message: 'Ошибка обновления элемента item' });
+    }
+});
+exports.updateOrderItem = updateOrderItem;
 // router.post('/', createClient)
 // router.get('/:id', getClient)
 // router.put('/:id', updateClient)

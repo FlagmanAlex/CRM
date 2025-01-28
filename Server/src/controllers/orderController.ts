@@ -112,7 +112,26 @@ export const getOrderItems = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Ошибка сервера в getOrderItem' })        
     }
 }
+export const updateOrderItem = async (req: Request, res: Response) => {
+    try {
 
+        console.log(req.body);
+        const updateOrderItem = 
+            await OrderItems.findByIdAndUpdate(req.params.id, req.body, {
+                new: true
+            })
+        
+        if (!updateOrderItem) {
+            res.status(404).json({message: "Item элемент не найден"})
+        }
+        res.status(200).json(updateOrderItem)
+        console.log("UpdateOrderItem");
+        
+    } catch (error) {
+        console.log('Ошибка обновления позиции item', error)
+        res.status(500).json({message: 'Ошибка обновления элемента item'})
+    }
+}
 
 
 // router.post('/', createClient)

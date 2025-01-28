@@ -1,4 +1,4 @@
-export interface IOrderItems {
+export interface IOrderItem {
     _id?: string
     orderId: string
     item: string
