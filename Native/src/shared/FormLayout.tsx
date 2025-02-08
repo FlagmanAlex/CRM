@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { THEME } from '../Default'
+import { Ionicons } from '@expo/vector-icons'
 
 interface FormProps {
     headerText: string 
@@ -14,7 +15,7 @@ export const FormLayout = ({ headerText, onClose, children }: FormProps) => {
             <View style={style.titleBlock}>
                 <Text style={style.headerText}>{headerText}</Text>
                 <TouchableOpacity onPress={onClose}>
-                    <Image style={style.image} source={require('../../assets/Close.png')} />
+                    <Ionicons name='close' color={THEME.color.white} size={28}/>
                 </TouchableOpacity>
             </View>
                 {children}

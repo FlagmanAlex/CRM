@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOrderItem = exports.getOrderItems = exports.getOrder = exports.getOrders = void 0;
+exports.deleteOrder = exports.newOrder = exports.getNewOrderNum = exports.saveOrderItem = exports.deleteOrderItem = exports.updateOrderItem = exports.getOrderItems = exports.getOrder = exports.getOrders = void 0;
 const order_model_1 = require("../models/order.model");
 const orderItems_model_1 = require("../models/orderItems.model");
 const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -94,11 +94,15 @@ exports.getOrders = getOrders;
 const getOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderId = req.params.id;
-        const order = yield order_model_1.Order.findById(orderId);
-        if (!order)
-            res.status(404).json({ message: "Клиент не найден" });
+        if (orderId) {
+            const order = yield order_model_1.Order.findById(orderId);
+            if (!order)
+                res.status(404).json({ message: "Клиент не найден" });
+            else
+                res.status(200).json(order);
+        }
         else
-            res.status(200).json(order);
+            console.log('orderId не определен');
     }
     catch (error) {
         console.error("Ошибка сервера в getOrder", error.message);
@@ -120,22 +124,94 @@ const getOrderItems = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.getOrderItems = getOrderItems;
 const updateOrderItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.body);
         const updateOrderItem = yield orderItems_model_1.OrderItems.findByIdAndUpdate(req.params.id, req.body, {
             new: true
         });
         if (!updateOrderItem) {
             res.status(404).json({ message: "Item элемент не найден" });
         }
-        res.status(200).json(updateOrderItem);
-        console.log("UpdateOrderItem");
+        else {
+            res.status(200).json(updateOrderItem);
+        }
     }
     catch (error) {
-        console.log('Ошибка обновления позиции item', error);
+        console.log('Ошибка обновления позиции updateOrderItem', error);
         res.status(500).json({ message: 'Ошибка обновления элемента item' });
     }
 });
 exports.updateOrderItem = updateOrderItem;
+const deleteOrderItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const deleteOrderItem = yield orderItems_model_1.OrderItems.findByIdAndDelete(req.params.id);
+        if (!deleteOrderItem) {
+            res.status(404).json({ message: "OrderItem не найден" });
+        }
+        else {
+            res.status(204).json({ message: "OrderItem удален" });
+        }
+    }
+    catch (error) {
+        console.error('Ошибка удаления позиции deleteOrderItem', error);
+        res.status(500).json({ message: 'Ошибка удаления позиции deleteOrderItem' });
+    }
+});
+exports.deleteOrderItem = deleteOrderItem;
+const saveOrderItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const newOrderItem = new orderItems_model_1.OrderItems(req.body);
+        console.log(req.body);
+        const saveOrderItem = yield newOrderItem.save();
+        res.status(201).json(saveOrderItem);
+    }
+    catch (error) {
+        console.error('Ошибка создания позиции createOrderItem', error);
+        res.status(500).json({ message: 'Ошибка создания позиции createOrderItem' });
+    }
+});
+exports.saveOrderItem = saveOrderItem;
+const getNewOrderNum = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const maxNumOrder = yield order_model_1.Order.findOne().sort({ orderNum: -1 }).limit(1).exec();
+        if (maxNumOrder === null || maxNumOrder === void 0 ? void 0 : maxNumOrder.orderNum)
+            res.status(201).json({ orderNum: maxNumOrder.orderNum + 1 });
+        else
+            res.status(404).json('Объект не найден');
+    }
+    catch (error) {
+        console.error("Ошибка получения номера документа", error);
+        res.status(501).json("Ошибка получения номера документа");
+    }
+});
+exports.getNewOrderNum = getNewOrderNum;
+const newOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const newOrder = new order_model_1.Order(req.body);
+        console.log(req.body);
+        const saveOrder = yield newOrder.save();
+        res.status(201).json(saveOrder);
+    }
+    catch (error) {
+        console.error('Ошибка создания документа Order', error);
+        res.status(500).json({ message: 'Ошибка создания документа Order' });
+    }
+});
+exports.newOrder = newOrder;
+const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const deleteOrder = yield order_model_1.Order.findByIdAndDelete(req.params.id);
+        if (!deleteOrder) {
+            res.status(404).json({ message: "Order не найден" });
+        }
+        else {
+            res.status(204).json({ message: "Order удален" });
+        }
+    }
+    catch (error) {
+        console.error('Ошибка удаления позиции deleteOrder', error);
+        res.status(500).json({ message: 'Ошибка удаления позиции deleteOrder' });
+    }
+});
+exports.deleteOrder = deleteOrder;
 // router.post('/', createClient)
 // router.get('/:id', getClient)
 // router.put('/:id', updateClient)

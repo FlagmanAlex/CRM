@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
-import { IOrderItem } from '../../../Interfaces/IOrderItem'
+import { IOrderItem } from '../../../../../../../../Interfaces/IOrderItem'
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { THEME } from '../Default'
-import { OrderItemForm } from './modals/OrderItemForm'
+import { THEME } from '../../../../../../Default'
+import { OrderItemForm } from './OrderItemForm/OrderItemForm'
 
 interface IOrderItemCardProps {
     orderItem: IOrderItem
     percent: number
+    deleteItem: (id: string) => Promise<void>
 }
 
 
-export const OrderItemCard = ({ orderItem, percent }: IOrderItemCardProps) => {
+export const OrderItemCard = ({ orderItem, percent, deleteItem }: IOrderItemCardProps) => {
 
     const orderSum = Math.round((orderItem.quantity * orderItem.price) * percent / 100)
     const [openModal, setOpenModal] = useState(false)
@@ -26,7 +27,10 @@ export const OrderItemCard = ({ orderItem, percent }: IOrderItemCardProps) => {
                 <View style={style.content}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={{ fontSize: 20, width: '80%' }}>{orderItem.item}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                         <Text style={{ fontSize: 18 }}>{`Кол-во: ${orderItem.quantity}`}</Text>
+                        <Text style={{ fontSize: 18 }}>{`Доставка до ${new Date(orderItem.dateTo).toLocaleDateString()}`}</Text>
                     </View>
                     <View style={style.inline}>
                         <Text style={{ color: THEME.color.wb }}>{`WB:${orderItem.discountPrice}`}</Text>
@@ -41,7 +45,6 @@ export const OrderItemCard = ({ orderItem, percent }: IOrderItemCardProps) => {
                         <Text>{`${orderItem.pai}`}</Text>
                         <Text>{`${orderItem.ship}`}</Text>
                     </View>
-                    <Text>{`Доставка до ${new Date(orderItem.dateTo).toLocaleDateString()}`}</Text>
                 </View>
             </TouchableOpacity>
             {orderItem ? (
@@ -49,6 +52,7 @@ export const OrderItemCard = ({ orderItem, percent }: IOrderItemCardProps) => {
                     <OrderItemForm
                         orderItem={orderItem}
                         onClose={handleClose} 
+                        deleteItem={deleteItem}
                     />
                 </Modal>
             ) : null

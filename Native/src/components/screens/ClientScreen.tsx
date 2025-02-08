@@ -3,7 +3,7 @@ import { Alert, FlatList, Modal, ScrollView, StyleSheet, View } from 'react-nati
 import axios from 'axios'
 import { IClient } from '../../../../Interfaces/IClient'
 import { ClientCard } from '../ClientCard'
-import { ClientFormModal } from '../modals/ClientFormModal'
+import { ClientFormModal } from '../forms/ClientFormModal'
 import { TextField } from '../../shared/TextField'
 import { SETTINGS } from '../../Default'
 

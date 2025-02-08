@@ -1,45 +1,82 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Alert, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { SETTINGS, THEME } from '../../Default'
-import { IOrderList } from '../../../../Interfaces/IOrderList'
-import axios from 'axios'
-import { OrderItemCard } from '../OrderItemCard'
-import { FormLayout } from '../../shared/FormLayout'
+import { SETTINGS, THEME } from '../../../../../Default'
+import { IOrderList } from '../../../../../../../Interfaces/IOrderList'
+import axios, { AxiosResponse } from 'axios'
+import { OrderItemCard } from './OrderItemCard/OrderItemCard'
+import { FormLayout } from '../../../../../shared/FormLayout'
 import { FontAwesome } from '@expo/vector-icons'
-import { useContextData } from '../../ContextProvider'
+import { useContextData } from '../../../../../ContextProvider'
+import { OrderItemForm } from './OrderItemCard/OrderItemForm/OrderItemForm'
+import { IOrderItem } from '../../../../../../../Interfaces/IOrderItem'
 
 interface OrderFormProps {
-    order: IOrderList | undefined
+    order: IOrderList
     onClose: () => void
 
 }
 
+
 const server = `${SETTINGS.host}:${SETTINGS.port}`
 
 export const OrderForm = ({ onClose, order }: OrderFormProps) => {
+    
+    const newOrderItem: IOrderItem = {
+        dateTo: new Date(),
+        deliveryPost: 0,
+        discountPrice: 0,
+        item: '',
+        orderId: order._id,
+        payment: 0,
+        price: 0,
+        pvzId: '6745c7ddc775afaf7466bbd3',
+        quantity: 0,
+        ord: false, 
+        pai: false,
+        rec: false,
+        ship: false,
+    }
 
+    const [openModal, setOpenModal] = useState<boolean>(false)
     const { orderItems, setOrderItems } = useContextData()
 
-    const handleNewOrder = () => {
+    const handleCloseOpenModal = () => {
+        setOpenModal(false)
+    }
 
+    const handleNewOrderItem = async () => {
+        try {
+            const response = await axios.post(`${server}/api/order/items/`)
+            setOrderItems({...response.data, orderId: order?._id})
+        } catch (error) {
+            Alert.alert(`Create status: ${error}`)
+        }
     }
-    const handleSaveOrder = () => {
+    const handleSaveOrderItem = () => {
         
     }
-    const handleUpdateOrder = () => {
+    const handleUpdateOrderItem = () => {
         
     }
-    const handleDeleteOrder = () => {
-        
+    const handleDeleteOrderItem = async (id: string) => {
+        try {
+            await axios.delete(`${server}/api/order/items/${id}`)
+            console.log(id);
+            
+        } catch (error) {
+            Alert.alert(`OrderItem status: ${error}`)
+        }
     }
 
     useEffect(() => {
         const responseDB = async () => {
             try {
-                const response = await axios.get(`${server}/api/order/items/${order?._id}`)
-                setOrderItems(response.data)
+                if (order) {
+                    const response = await axios.get(`${server}/api/order/items/${order?._id}`)
+                    setOrderItems(response.data)
+                }
             } catch (error) {
-                Alert.alert('Ошибка сервера')
+                Alert.alert(`Ошибка сервера ${error}`)
             }
         }
 
@@ -75,13 +112,13 @@ export const OrderForm = ({ onClose, order }: OrderFormProps) => {
                             <OrderItemCard
                                 key={item._id}
                                 percent={order.percent}
-                                // order={order}
                                 orderItem={item}
+                                deleteItem={handleDeleteOrderItem}
                             />
                         </View>
                     }
                     ListFooterComponent={
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => setOpenModal(true)}>
                             <View style={style.newCard}>
                                 <FontAwesome
                                     name='plus'
@@ -94,6 +131,13 @@ export const OrderForm = ({ onClose, order }: OrderFormProps) => {
                     keyExtractor={(item, index) => item._id ?? index.toString()}
                 />
             </View>
+            <Modal visible={openModal}>
+                    <OrderItemForm 
+                        orderItem={newOrderItem}
+                        onClose={handleCloseOpenModal}
+                        deleteItem={handleDeleteOrderItem}
+                    />
+            </Modal>
         </FormLayout>
         : null
 }

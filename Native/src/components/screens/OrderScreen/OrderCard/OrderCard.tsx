@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { IOrderList } from '../../../Interfaces/IOrderList'
+import { IOrderList } from '../../../../../../Interfaces/IOrderList'
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { OrderForm } from './modals/OrderForm'
+import { OrderForm } from './OrderForm/OrderForm'
 
 interface IOrderCardProps {
     order: IOrderList

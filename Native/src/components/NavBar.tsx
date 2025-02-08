@@ -2,7 +2,7 @@ import React from 'react'
 import { Alert, Image, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { THEME } from '../Default'
 import { ClientScreen } from './screens/ClientScreen'
-import { OrderScreen } from './screens/OrderScreen'
+import { OrderScreen } from './screens/OrderScreen/OrderScreen'
 
 interface NavBarProps {
   component: (component: React.ReactNode) => void

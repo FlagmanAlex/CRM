@@ -6,6 +6,7 @@ const color = {
     green: '#007c00',
     blue: '#0000aa',
     grey: '#aaa',
+    lightGrey: '#eee',
     lightBlue: '#ADD8E6',
     skyBlue: '#87CEEB',
     steelBlue: '#4682B4',
@@ -23,7 +24,8 @@ export const THEME = {
         grey: '#aaa',
         main: '#000066',
         black: color.black,
-        wb: color.pinks
+        wb: color.pinks,
+        red: color.red
     },
     button: {
         apply: color.green,

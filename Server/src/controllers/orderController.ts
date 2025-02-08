@@ -91,10 +91,14 @@ export const getOrder = async (req: Request, res: Response) => {
     try {
 
         const orderId = req.params.id
-        const order = await Order.findById(orderId)       
 
-        if (!order) res.status(404).json({ message: "Клиент не найден" })
-        else res.status(200).json(order)
+        if(orderId) {
+            const order = await Order.findById(orderId)       
+            if (!order) res.status(404).json({ message: "Клиент не найден" })
+            else res.status(200).json(order)
+        } else console.log('orderId не определен');
+        
+
     } catch (error) {
         console.error("Ошибка сервера в getOrder", (error as NodeJS.ErrnoException).message);
         res.status(500).json({ message: 'Ошибка сервера в getOrder' })
@@ -114,8 +118,6 @@ export const getOrderItems = async (req: Request, res: Response) => {
 }
 export const updateOrderItem = async (req: Request, res: Response) => {
     try {
-
-        console.log(req.body);
         const updateOrderItem = 
             await OrderItems.findByIdAndUpdate(req.params.id, req.body, {
                 new: true
@@ -123,16 +125,80 @@ export const updateOrderItem = async (req: Request, res: Response) => {
         
         if (!updateOrderItem) {
             res.status(404).json({message: "Item элемент не найден"})
+        } else {
+            res.status(200).json(updateOrderItem)
         }
-        res.status(200).json(updateOrderItem)
-        console.log("UpdateOrderItem");
-        
     } catch (error) {
-        console.log('Ошибка обновления позиции item', error)
+        console.log('Ошибка обновления позиции updateOrderItem', error)
         res.status(500).json({message: 'Ошибка обновления элемента item'})
     }
 }
+export const deleteOrderItem = async (req: Request, res: Response) => {
+    try {
+        const deleteOrderItem = await OrderItems.findByIdAndDelete(req.params.id)
+        if (!deleteOrderItem) {
+            res.status(404).json({message: "OrderItem не найден"})
+        } else {
+            res.status(204).json({message: "OrderItem удален"})
+        }
+    } catch (error) {
+        console.error('Ошибка удаления позиции deleteOrderItem', error);
+        res.status(500).json({message: 'Ошибка удаления позиции deleteOrderItem'})
+    }
+}
+export const saveOrderItem = async (req: Request, res: Response) => {
+    try {
+        const newOrderItem = new OrderItems(req.body)
+        console.log(req.body);
+        
+        const saveOrderItem = await newOrderItem.save()
+        res.status(201).json(saveOrderItem)
+    } catch (error) {
+        console.error('Ошибка создания позиции createOrderItem', error);
+        res.status(500).json({message: 'Ошибка создания позиции createOrderItem'})
+    }
+}
 
+
+export const getNewOrderNum = async (req: Request, res: Response) => {
+    try {
+        const maxNumOrder = await Order.findOne().sort({ orderNum: -1 }).limit(1).exec()
+        if (maxNumOrder?.orderNum) res.status(201).json({orderNum: maxNumOrder.orderNum + 1})
+            else res.status(404).json('Объект не найден')
+    } catch (error) {
+        console.error("Ошибка получения номера документа", error)        
+        res.status(501).json("Ошибка получения номера документа")
+    }
+}
+
+export const newOrder = async (req: Request, res: Response) => {
+    try {
+
+        const newOrder = new Order(req.body)
+        console.log(req.body);
+        
+        const saveOrder = await newOrder.save()
+        res.status(201).json(saveOrder)
+    } catch (error) {
+        console.error('Ошибка создания документа Order', error)
+        res.status(500).json({message: 'Ошибка создания документа Order'})
+        
+    }
+}
+
+export const deleteOrder = async (req: Request, res: Response) => {
+    try {
+        const deleteOrder = await Order.findByIdAndDelete(req.params.id)
+        if (!deleteOrder) {
+            res.status(404).json({message: "Order не найден"})
+        } else {
+            res.status(204).json({message: "Order удален"})
+        }
+    } catch (error) {
+        console.error('Ошибка удаления позиции deleteOrder', error);
+        res.status(500).json({message: 'Ошибка удаления позиции deleteOrder'})
+    }
+}
 
 // router.post('/', createClient)
 // router.get('/:id', getClient)
