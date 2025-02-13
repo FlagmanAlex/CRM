@@ -1,10 +1,13 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react'
 import { IOrderList } from '../../Interfaces/IOrderList'
 import { IOrderItem } from '../../Interfaces/IOrderItem'
+import { IClient } from '../../Interfaces/IClient'
 
 type ContextType = {
-    orders: IOrderList[]
-    setOrders: React.Dispatch<React.SetStateAction<IOrderList[]>>
+    clients: IClient[]
+    setClients: React.Dispatch<React.SetStateAction<IClient[]>>
+    orderLists: IOrderList[]
+    setOrderLists: React.Dispatch<React.SetStateAction<IOrderList[]>>
     orderItems: IOrderItem[]
     setOrderItems: React.Dispatch<React.SetStateAction<IOrderItem[]>>
 }
@@ -16,11 +19,12 @@ interface ContextProviderProps {
 }
 
 export const ContextProvider = ({ children }: ContextProviderProps) => {
-    const [orders, setOrders] = useState<IOrderList[]>([])
+    const [orderLists, setOrderLists] = useState<IOrderList[]>([])
     const [orderItems, setOrderItems] = useState<IOrderItem[]>([])
+    const [clients, setClients] = useState<IClient[]>([])
 
     return (
-        <contextData.Provider value={{ orders, setOrders, orderItems, setOrderItems }}>
+        <contextData.Provider value={{clients, setClients, orderLists, setOrderLists, orderItems, setOrderItems }}>
             {children}
         </contextData.Provider>
     )

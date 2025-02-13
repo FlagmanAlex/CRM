@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOrder = exports.newOrder = exports.getNewOrderNum = exports.saveOrderItem = exports.deleteOrderItem = exports.updateOrderItem = exports.getOrderItems = exports.getOrder = exports.getOrders = void 0;
+exports.updateOrder = exports.deleteOrder = exports.newOrder = exports.getNewOrderNum = exports.saveOrderItem = exports.deleteOrderItem = exports.updateOrderItem = exports.getOrderItems = exports.getOrders = exports.getOrder = exports.getOrderLists = void 0;
 const order_model_1 = require("../models/order.model");
 const orderItems_model_1 = require("../models/orderItems.model");
-const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getOrderLists = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { startDate, endDate } = req.query;
         // Создаем фильтр для диапазона дат
@@ -90,7 +90,7 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
-exports.getOrders = getOrders;
+exports.getOrderLists = getOrderLists;
 const getOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderId = req.params.id;
@@ -110,6 +110,20 @@ const getOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getOrder = getOrder;
+const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const orders = yield order_model_1.Order.find();
+        if (!orders)
+            res.status(404).json({ message: "Список документов пуст" });
+        else
+            res.status(200).json(orders);
+    }
+    catch (error) {
+        console.error("Ошибка сервера в getOrder", error.message);
+        res.status(500).json({ message: 'Ошибка сервера в getOrder' });
+    }
+});
+exports.getOrders = getOrders;
 const getOrderItems = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderId = req.params.id;
@@ -198,12 +212,22 @@ const newOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.newOrder = newOrder;
 const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deleteOrder = yield order_model_1.Order.findByIdAndDelete(req.params.id);
-        if (!deleteOrder) {
-            res.status(404).json({ message: "Order не найден" });
+        const respons = yield orderItems_model_1.OrderItems.find({ orderId: req.params.id });
+        console.log(respons.length == 0);
+        if (!respons.length) {
+            const deleteOrder = yield order_model_1.Order.findByIdAndDelete(req.params.id);
+            if (!deleteOrder) {
+                console.log("Order не найден");
+                res.status(404).json({ message: "Order не найден" });
+            }
+            else {
+                console.log("Order удален");
+                res.status(204).json({ message: "Order удален" });
+            }
         }
         else {
-            res.status(204).json({ message: "Order удален" });
+            console.log("Нелья удалять документ с содержимым внутри");
+            res.status(403).json({ message: "Нелья удалять документ с содержимым внутри" });
         }
     }
     catch (error) {
@@ -212,7 +236,22 @@ const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.deleteOrder = deleteOrder;
-// router.post('/', createClient)
-// router.get('/:id', getClient)
-// router.put('/:id', updateClient)
-// router.delete('/:id', deleteClient)
+const updateOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const updateOrder = yield order_model_1.Order.findByIdAndUpdate(req.params.id, req.body, {
+            new: true
+        });
+        if (!updateOrder) {
+            res.status(404).json({ message: "Order документ не найден" });
+            console.log("Order документ не найден");
+        }
+        else {
+            res.status(200).json(updateOrder);
+        }
+    }
+    catch (error) {
+        console.log('Ошибка обновления документа Order', error);
+        res.status(500).json({ message: 'Ошибка обновления документа Order' });
+    }
+});
+exports.updateOrder = updateOrder;

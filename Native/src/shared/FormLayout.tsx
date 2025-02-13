@@ -27,7 +27,6 @@ const style = StyleSheet.create({
     content: {
         width: '100%',
         height: '100%',
-        paddingBottom: 50
     },
     titleBlock: {
         width: '100%',

@@ -2,18 +2,18 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Alert, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { SETTINGS, THEME } from '../../../../../Default'
 import { IOrderList } from '../../../../../../../Interfaces/IOrderList'
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import { OrderItemCard } from './OrderItemCard/OrderItemCard'
 import { FormLayout } from '../../../../../shared/FormLayout'
 import { FontAwesome } from '@expo/vector-icons'
 import { useContextData } from '../../../../../ContextProvider'
 import { OrderItemForm } from './OrderItemCard/OrderItemForm/OrderItemForm'
 import { IOrderItem } from '../../../../../../../Interfaces/IOrderItem'
+import { BottomBar } from '../../../../BottomBar'
 
 interface OrderFormProps {
     order: IOrderList
     onClose: () => void
-
 }
 
 
@@ -52,12 +52,7 @@ export const OrderForm = ({ onClose, order }: OrderFormProps) => {
             Alert.alert(`Create status: ${error}`)
         }
     }
-    const handleSaveOrderItem = () => {
-        
-    }
-    const handleUpdateOrderItem = () => {
-        
-    }
+
     const handleDeleteOrderItem = async (id: string) => {
         try {
             await axios.delete(`${server}/api/order/items/${id}`)
@@ -72,8 +67,10 @@ export const OrderForm = ({ onClose, order }: OrderFormProps) => {
         const responseDB = async () => {
             try {
                 if (order) {
-                    const response = await axios.get(`${server}/api/order/items/${order?._id}`)
-                    setOrderItems(response.data)
+                    if (order._id) {
+                        const response = await axios.get(`${server}/api/order/items/${order._id}`)
+                        setOrderItems(response.data)
+                    }
                 }
             } catch (error) {
                 Alert.alert(`Ошибка сервера ${error}`)
@@ -82,12 +79,12 @@ export const OrderForm = ({ onClose, order }: OrderFormProps) => {
 
         responseDB()
 
-    }, [orderItems])
+    }, [orderItems, order])
 
 
     return order ?
-        <FormLayout headerText={`Заказ ${order.orderNum} - orderFormModal`} onClose={onClose} >
-            <View style={style.orderBlock}>
+        <FormLayout headerText={`Заказ ${order.orderNum} - orderForm`} onClose={onClose} >
+            {/* <View style={style.orderBlock}> */}
                 <View style={style.headerBlock}>
                     <View style={style.lineBlock}>
                         <Text style={style.text}>{`Дата ${new Date(order.date).toLocaleDateString()}`}</Text>
@@ -118,7 +115,9 @@ export const OrderForm = ({ onClose, order }: OrderFormProps) => {
                         </View>
                     }
                     ListFooterComponent={
-                        <TouchableOpacity onPress={() => setOpenModal(true)}>
+                        <TouchableOpacity 
+                            onPress={() => setOpenModal(true)}
+                        >
                             <View style={style.newCard}>
                                 <FontAwesome
                                     name='plus'
@@ -129,8 +128,9 @@ export const OrderForm = ({ onClose, order }: OrderFormProps) => {
                         </TouchableOpacity>
                     }
                     keyExtractor={(item, index) => item._id ?? index.toString()}
+                    contentContainerStyle={{ flexGrow: 1, padding: 5 }}
                 />
-            </View>
+            {/* </View> */}
             <Modal visible={openModal}>
                     <OrderItemForm 
                         orderItem={newOrderItem}

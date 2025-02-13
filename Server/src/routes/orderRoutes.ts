@@ -1,13 +1,16 @@
 import express from 'express'
 import { 
-    getOrders, 
+    getOrderLists, 
     getOrder, 
     getOrderItems, 
     updateOrderItem, 
     deleteOrderItem, 
     newOrder,
     saveOrderItem,
-    getNewOrderNum
+    getNewOrderNum,
+    deleteOrder,
+    updateOrder,
+    getOrders
 } from '../controllers/orderController'
 
 const router = express.Router()
@@ -21,8 +24,11 @@ router.put('/items/:id', updateOrderItem)
 router.delete('/items/:id', deleteOrderItem)
 
 router.get('/', getOrders)
+router.get('/OrderLists/', getOrderLists)
 router.get('/:id', getOrder)
 router.post('/', newOrder)
+router.delete('/:id', deleteOrder)
+router.put('/:id', updateOrder)
 
 // router.post('/:id', createOrder)
 // router.put('/:id', updateOrder)

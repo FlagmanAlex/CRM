@@ -1,7 +1,7 @@
 import React from 'react'
 import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { IClient } from '../../../Interfaces/IClient'
-import { STYLE, THEME } from '../Default'
+import { IClient } from '../../../../../../Interfaces/IClient'
+import { STYLE, THEME } from '../../../../Default'
 
 interface IClientCardProps {
     client: IClient
@@ -24,7 +24,10 @@ export const ClientCard = ({ client, select }: IClientCardProps) => {
       };
 
     return (
-        <TouchableOpacity onPress={() => {if (client._id) select(client)}}>
+        <TouchableOpacity 
+            onPress={() => {if (client._id) select(client)}}
+            onLongPress={() => {}}
+        >
             <View 
                 style={style.card} 
             >

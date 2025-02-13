@@ -1,11 +1,11 @@
 import React from 'react'
 import { Modal, StyleSheet, TextInput, View } from 'react-native'
-import { IClient } from '../../../../Interfaces/IClient'
-import { THEME } from '../../Default'
-import { FormLayout } from '../../shared/FormLayout'
-import { ButtonApply } from '../../shared/Buttons/ButtonApply'
-import { ButtonDelete } from '../../shared/Buttons/ButtonDelete'
-import { ButtonBack } from '../../shared/Buttons/ButtonBack'
+import { IClient } from '../../../../../../Interfaces/IClient'
+import { THEME } from '../../../../Default'
+import { FormLayout } from '../../../../shared/FormLayout'
+import { ButtonApply } from '../../../../shared/Buttons/ButtonApply'
+import { ButtonDelete } from '../../../../shared/Buttons/ButtonDelete'
+import { ButtonBack } from '../../../../shared/Buttons/ButtonBack'
 
 interface ClientFormProps {
     openModal: boolean
@@ -16,7 +16,7 @@ interface ClientFormProps {
     onDelete: () => void
 }
 
-export const ClientFormModal = ({ onChange, client, onClose, onSave, onDelete, openModal }: ClientFormProps) => {
+export const ClientForm = ({ onChange, client, onClose, onSave, onDelete, openModal }: ClientFormProps) => {
 
     const fields = [
         { key: "name", placeholder: "Имя", value: client.name, keyboardType: "default" as const, multiline: false },

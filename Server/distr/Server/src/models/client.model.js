@@ -41,6 +41,6 @@ const ClientSchema = new mongoose_1.Schema({
     phone: { type: String },
     address: { type: String },
     GPS: { type: String },
-    Percent: { type: Number }
+    Percent: { type: Number, default: 15 }
 });
 exports.Client = mongoose_1.default.model('Client', ClientSchema, 'Client');

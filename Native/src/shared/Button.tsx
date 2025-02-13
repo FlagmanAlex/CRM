@@ -11,7 +11,7 @@ interface ButtonProps {
 
 export const Button = ({ children, textColor = THEME.color.black, bgColor = THEME.color.main, onPress }: ButtonProps) => {
   return (
-    <TouchableNativeFeedback onPress={onPress}>
+    <TouchableNativeFeedback onPress={onPress} background={TouchableNativeFeedback.Ripple(THEME.color.white, false)} >
         <View style={{...style.button, backgroundColor: bgColor }}>
             <Text style={{...style.text, color: textColor }}>{children}</Text>
         </View>

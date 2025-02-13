@@ -1,11 +1,8 @@
-import { populate } from 'dotenv'
-import { Client } from '../models/client.model'
 import { Order } from '../models/order.model'
 import { OrderItems } from '../models/orderItems.model'
 import { Response, Request } from 'express'
-import path from 'path'
 
-export const getOrders = async (req: Request, res: Response) => {
+export const getOrderLists = async (req: Request, res: Response) => {
     try {
         
 
@@ -104,6 +101,16 @@ export const getOrder = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Ошибка сервера в getOrder' })
     }
 }
+export const getOrders = async (req: Request, res: Response) => {
+    try {
+        const orders = await Order.find()       
+        if (!orders) res.status(404).json({ message: "Список документов пуст" })
+        else res.status(200).json(orders)
+    } catch (error) {
+        console.error("Ошибка сервера в getOrder", (error as NodeJS.ErrnoException).message);
+        res.status(500).json({ message: 'Ошибка сервера в getOrder' })
+    }
+}
 export const getOrderItems = async (req: Request, res: Response) => {
     try {
         const orderId = req.params.id
@@ -159,7 +166,6 @@ export const saveOrderItem = async (req: Request, res: Response) => {
     }
 }
 
-
 export const getNewOrderNum = async (req: Request, res: Response) => {
     try {
         const maxNumOrder = await Order.findOne().sort({ orderNum: -1 }).limit(1).exec()
@@ -182,17 +188,26 @@ export const newOrder = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Ошибка создания документа Order', error)
         res.status(500).json({message: 'Ошибка создания документа Order'})
-        
     }
 }
 
 export const deleteOrder = async (req: Request, res: Response) => {
     try {
-        const deleteOrder = await Order.findByIdAndDelete(req.params.id)
-        if (!deleteOrder) {
-            res.status(404).json({message: "Order не найден"})
+        const respons = await OrderItems.find({ orderId: req.params.id })
+        console.log(respons.length == 0);
+        
+        if (!respons.length) {
+            const deleteOrder = await Order.findByIdAndDelete(req.params.id)
+            if (!deleteOrder) {
+                console.log("Order не найден");
+                res.status(404).json({message: "Order не найден"})
+            } else {
+                console.log("Order удален");
+                res.status(204).json({message: "Order удален"})
+            }
         } else {
-            res.status(204).json({message: "Order удален"})
+            console.log("Нелья удалять документ с содержимым внутри");
+            res.status(403).json({message: "Нелья удалять документ с содержимым внутри"})
         }
     } catch (error) {
         console.error('Ошибка удаления позиции deleteOrder', error);
@@ -200,7 +215,22 @@ export const deleteOrder = async (req: Request, res: Response) => {
     }
 }
 
-// router.post('/', createClient)
-// router.get('/:id', getClient)
-// router.put('/:id', updateClient)
-// router.delete('/:id', deleteClient)
+export const updateOrder = async (req: Request, res: Response) => {
+    try {
+        const updateOrder = 
+            await Order.findByIdAndUpdate(req.params.id, req.body, {
+                new: true
+            })
+        
+        if (!updateOrder) {
+            res.status(404).json({message: "Order документ не найден"})
+            console.log("Order документ не найден");
+        } else {
+            
+            res.status(200).json(updateOrder)
+        }
+    } catch (error) {
+        console.log('Ошибка обновления документа Order', error)
+        res.status(500).json({message: 'Ошибка обновления документа Order'})
+    }
+}

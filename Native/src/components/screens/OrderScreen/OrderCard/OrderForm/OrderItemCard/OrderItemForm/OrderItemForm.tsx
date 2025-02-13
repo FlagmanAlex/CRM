@@ -118,7 +118,7 @@ export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => 
     }
 
     return (
-        <FormLayout headerText={`Карточка товара/OrderItemsFormModal`} onClose={onClose}>
+        <FormLayout headerText={`Карточка товара/OrderItemsForm`} onClose={onClose}>
             <View style={style.content}>
                 <View style={style.bodyBlock}>
                     {
@@ -152,6 +152,7 @@ export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => 
 }
 const style = StyleSheet.create({
     content: {
+        flex: 1,
         height: '100%',
         flexDirection: 'column',
         justifyContent: 'space-between',

@@ -5,10 +5,11 @@ import { OrderForm } from './OrderForm/OrderForm'
 
 interface IOrderCardProps {
     order: IOrderList
+    deleteOrder: (orderId: string) => void
 }
 
 
-export const OrderCard = ({ order }: IOrderCardProps) => {
+export const OrderCard = ({ order, deleteOrder }: IOrderCardProps) => {
 
     const deliverySumm = Math.round(order.priceSum * order.percent / 100)
     const paySum = Math.round(order.priceSum * (order.percent / 100 + 1))
@@ -21,7 +22,10 @@ export const OrderCard = ({ order }: IOrderCardProps) => {
 
     return (
         <>
-            <TouchableOpacity onPress={() => setOpenModal(true)}>
+            <TouchableOpacity 
+                onPress={() => setOpenModal(true)}
+                onLongPress={() => deleteOrder(order._id)}
+            >
                 <View style={style.content}>
                     <View style={style.titleBlock}>
                         <Text style={{ ...style.text, width: '10%' }}>{order.orderNum}</Text>
