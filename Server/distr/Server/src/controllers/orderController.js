@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOrder = exports.deleteOrder = exports.newOrder = exports.getNewOrderNum = exports.saveOrderItem = exports.deleteOrderItem = exports.updateOrderItem = exports.getOrderItems = exports.getOrders = exports.getOrder = exports.getOrderLists = void 0;
+exports.getOrderByClientId = exports.updateOrder = exports.deleteOrder = exports.newOrder = exports.getNewOrderNum = exports.saveOrderItem = exports.deleteOrderItem = exports.updateOrderItem = exports.getOrderItems = exports.getOrders = exports.getOrder = exports.getOrderLists = void 0;
 const order_model_1 = require("../models/order.model");
 const orderItems_model_1 = require("../models/orderItems.model");
 const getOrderLists = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -255,3 +255,14 @@ const updateOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.updateOrder = updateOrder;
+const getOrderByClientId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const respons = yield order_model_1.Order.find({ clientId: req.params.id });
+        res.status(200).json(respons);
+    }
+    catch (error) {
+        console.log('Ошибка получения данных по ClientId');
+        res.status(500).json({ message: 'Ошибка получения данных по ClientId' });
+    }
+});
+exports.getOrderByClientId = getOrderByClientId;

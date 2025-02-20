@@ -217,6 +217,7 @@ export const deleteOrder = async (req: Request, res: Response) => {
 
 export const updateOrder = async (req: Request, res: Response) => {
     try {
+        
         const updateOrder = 
             await Order.findByIdAndUpdate(req.params.id, req.body, {
                 new: true
@@ -232,5 +233,14 @@ export const updateOrder = async (req: Request, res: Response) => {
     } catch (error) {
         console.log('Ошибка обновления документа Order', error)
         res.status(500).json({message: 'Ошибка обновления документа Order'})
+    }
+}
+export const getOrderByClientId = async (req: Request, res: Response) => {
+    try {
+        const respons = await Order.find({ clientId: req.params.id })
+        res.status(200).json(respons)
+    } catch (error) {
+        console.log('Ошибка получения данных по ClientId');
+        res.status(500).json({message: 'Ошибка получения данных по ClientId'})
     }
 }

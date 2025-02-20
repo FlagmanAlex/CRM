@@ -10,7 +10,8 @@ import {
     getNewOrderNum,
     deleteOrder,
     updateOrder,
-    getOrders
+    getOrders,
+    getOrderByClientId
 } from '../controllers/orderController'
 
 const router = express.Router()
@@ -24,7 +25,8 @@ router.put('/items/:id', updateOrderItem)
 router.delete('/items/:id', deleteOrderItem)
 
 router.get('/', getOrders)
-router.get('/OrderLists/', getOrderLists)
+router.get('/getOrderByClientId/:id', getOrderByClientId)
+router.get('/orderLists/', getOrderLists)
 router.get('/:id', getOrder)
 router.post('/', newOrder)
 router.delete('/:id', deleteOrder)

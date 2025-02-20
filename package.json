@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cd server && npm run dev",
-    "dev": "cd Native && npm run start",
+    "native": "cd Native && npm run start",
     "server": "cd server && npm run server"
   },
   "keywords": [],

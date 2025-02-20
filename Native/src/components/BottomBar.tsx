@@ -46,13 +46,4 @@ const style = StyleSheet.create({
     // height: 20
     // width: '100%',
   },
-  button: {
-    // flex: 1,
-    // width: '100%',
-    // height: '100%',
-    // justifyContent: 'center',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: THEME.color.white,
-  },
 })

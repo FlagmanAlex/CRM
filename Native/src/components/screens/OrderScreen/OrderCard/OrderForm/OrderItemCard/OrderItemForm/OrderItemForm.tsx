@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { FormLayout } from '../../../../../../../shared/FormLayout'
 import { ButtonApply } from '../../../../../../../shared/Buttons/ButtonApply'
@@ -9,6 +9,7 @@ import { IOrderItem } from '../../../../../../../../../Interfaces/IOrderItem'
 import axios from 'axios'
 import { SETTINGS, THEME } from '../../../../../../../Default'
 import  * as yup  from "yup";
+import { useContextData } from '../../../../../../../ContextProvider'
 
 interface OICMProps {
     orderItem: IOrderItem
@@ -22,6 +23,7 @@ export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => 
     const server = `${SETTINGS.host}:${SETTINGS.port}`
 
     const [selectOrderItem, setSelectOrderItem] = useState<IOrderItem>(orderItem)
+    const { orderItems, setOrderItems } = useContextData()
 
     //Состояние для ошибок валидации yup
     const [errors, setErrors] = useState<Record<string, string>>({})
@@ -74,6 +76,13 @@ export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => 
 
             if (selectOrderItem._id) {
                 axios.put(`${server}/api/order/items/${selectOrderItem._id}`, selectOrderItem)
+                const updateOrderItems = orderItems.map(orderItem => 
+                    orderItem._id === selectOrderItem._id ? { ...orderItem, ...selectOrderItem } : orderItem
+                )
+                if (!orderItems.some((order) => order._id === selectOrderItem._id)) {
+                    updateOrderItems.push(selectOrderItem);
+                }
+                setOrderItems(updateOrderItems)
             } else {
                 axios.post(`${server}/api/order/items`, selectOrderItem)
             }

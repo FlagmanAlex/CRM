@@ -1,4 +1,6 @@
 import { StyleSheet } from "react-native"
+import { IOrderList } from "../../Interfaces/IOrderList"
+import { IOrderItem } from "../../Interfaces/IOrderItem"
 
 const color = {
     black: '#000',
@@ -50,4 +52,59 @@ export const STYLE = StyleSheet.create({
 export const SETTINGS = {
     host: 'http://192.168.50.2',
     port: '5001',
+}
+
+
+/**
+ * Возвращает сумму заказа, суммируя произведения всех позиций orderItems полей quantity * price. 
+ * @param orderItems State OrderItems массив позиций
+ * @returns Итоговая сумма произведений quantity * price
+ */
+export const getOrderItemsSumTotal = (orderItems: IOrderItem[]) => {
+    return orderItems.reduce((total, orderItem) => {return total + (orderItem.quantity * orderItem.price)}, 0)
+}
+/**
+ * Возвращает итоговый процент доставки по массиву orderItems
+ * @param orderItems State OrderItems массив позиций
+ * @param orderLists State OrderLists необходим для получения процента документа
+ * @returns Процент доставки накладной 
+ */
+export const getDeliveryItemsSumTotal = (orderItems: IOrderItem[], orderLists: IOrderList[]) => {
+    return orderItems.reduce((total, orderItem) => {
+        // Находим соответствующий orderList по orderId
+        const orderList = orderLists.find(orderList => orderList._id === orderItem.orderId);
+
+        // Проверяем, что orderList существует и percent является числом
+        if (orderList && typeof orderList.percent === 'number') {
+            return Math.round(total + (orderItem.quantity * orderItem.price * orderList.percent / 100));
+        }
+        // Если не найден соответствующий orderList или percent некорректен, просто возвращаем текущую сумму
+        return total;
+    }, 0)
+}
+/**
+ * Возвращает сумму всех доп платежей таких как курьерская доставка и прочее
+ * @param orderItems State OrderItems массив позиций
+ * @returns Сумма всех доп. платежей по позициям
+ */
+export const getAdditionalSum = (orderItems: IOrderItem[]) => {
+    return orderItems.reduce((total, orderItem) => {
+        return total + (orderItem.deliveryPost ? orderItem.deliveryPost : 0)
+    }, 0)
+}
+/**
+ * Возвращает сумму всех документов по полу priceSum из OrderLists
+ * @param orderLists State OrderLists массив ордеров
+ * @returns Итоговая сумма всех документов
+ */
+export const getOrderPriceSumTotal = (orderLists: IOrderList[]) => {
+    return orderLists.reduce((total, orderList) => {return total + orderList.priceSum}, 0)
+}
+/**
+ * Возвращает сумму доставки всех документов
+ * @param orderLists State OrderLists массив ордеров
+ * @returns Итоговая сумма доставки всех документов
+ */
+export const getOrderDeliverySumTotal = (orderLists: IOrderList[]) => {
+    return Math.round(orderLists.reduce((total, orderList) => {return total + orderList.priceSum * (orderList.percent ? orderList.percent : 1) / 100}, 0))
 }

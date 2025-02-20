@@ -9,7 +9,7 @@ const ClientSchema: Schema = new Schema ({
     phone: {type: String},
     address: {type: String},
     GPS: {type: String},
-    Percent: {type: Number, default: 15}
+    percent: {type: Number, default: 15}
 })
 
 export const Client = mongoose.model<IClientModel>('Client', ClientSchema, 'Client')

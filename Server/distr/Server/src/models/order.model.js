@@ -39,5 +39,6 @@ const OrderSchema = new mongoose_1.Schema({
     orderNum: { type: Number, required: true },
     date: { type: Date, required: true, default: () => new Date() },
     clientId: { type: mongoose_1.default.Schema.ObjectId, ref: 'Client', required: true },
+    percent: { type: Number, default: 15 }
 });
 exports.Order = mongoose_1.default.model('Order', OrderSchema, 'Order');
