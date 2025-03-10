@@ -7,11 +7,10 @@ import { OrderItemForm } from './OrderItemForm/OrderItemForm'
 interface IOrderItemCardProps {
     orderItem: IOrderItem
     percent: number
-    deleteItem: (id: string) => Promise<void>
 }
 
 
-export const OrderItemCard = ({ orderItem, percent, deleteItem }: IOrderItemCardProps) => {
+export const OrderItemCard = ({ orderItem, percent }: IOrderItemCardProps) => {
 
     const orderSum = Math.round((orderItem.quantity * orderItem.price) * percent / 100)
     const [openModal, setOpenModal] = useState(false)
@@ -52,7 +51,6 @@ export const OrderItemCard = ({ orderItem, percent, deleteItem }: IOrderItemCard
                     <OrderItemForm
                         orderItem={orderItem}
                         onClose={handleClose} 
-                        deleteItem={deleteItem}
                     />
                 </Modal>
             ) : null

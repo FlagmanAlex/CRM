@@ -101,7 +101,7 @@ export const CatalogClients = () => {
             {/* <div className="flex flex-row gap-3 justify-between"> */}
               <span className="text-stone-700 text-xs col-start-1 col-span-3">{client.address}</span>
               <span className="text-stone-700 text-xs text-center col-span-1">{client.percent}%</span>
-              <span className="text-stone-700 text-xs text-right col-span-2">{client.GPS}</span>
+              <span className="text-stone-700 text-xs text-right col-span-2">{client.gps}</span>
             {/* </div> */}
           </div>
         ))
@@ -166,8 +166,8 @@ export const CatalogClients = () => {
                 type="text"
                 placeholder="GPS"
                 className="w-full border px-3 py-2 rounded-md"
-                value={selectedClient?.GPS}
-                onChange={e => handleFieldChange("GPS", e.target.value)}
+                value={selectedClient?.gps}
+                onChange={e => handleFieldChange("gps", e.target.value)}
               />
               <div className="flex gap-2">
                 <button

@@ -1,7 +1,7 @@
 export interface IOrderList {
     _id: string
     orderNum: number
-    date: Date
+    date: string
     clientId: string
     discountSum: number
     priceSum: number

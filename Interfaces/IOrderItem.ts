@@ -4,7 +4,7 @@ export interface IOrderItem {
     item: string
     url?: string
     courierNumber?: string
-    dateTo: Date
+    dateTo: string
     quantity: number
     discountPrice: number
     price: number

@@ -6,12 +6,12 @@ import {
     updateOrderItem, 
     deleteOrderItem, 
     newOrder,
-    saveOrderItem,
     getNewOrderNum,
     deleteOrder,
     updateOrder,
     getOrders,
-    getOrderByClientId
+    getOrderByClientId,
+    newOrderItem
 } from '../controllers/orderController'
 
 const router = express.Router()
@@ -20,7 +20,7 @@ const router = express.Router()
 router.get('/getOrderNum/', getNewOrderNum)
 
 router.get('/items/:id', getOrderItems)
-router.post('/items/', saveOrderItem)
+router.post('/items/', newOrderItem)
 router.put('/items/:id', updateOrderItem)
 router.delete('/items/:id', deleteOrderItem)
 
@@ -30,7 +30,7 @@ router.get('/orderLists/', getOrderLists)
 router.get('/:id', getOrder)
 router.post('/', newOrder)
 router.delete('/:id', deleteOrder)
-router.put('/:id', updateOrder)
+router.patch('/:id', updateOrder)
 
 // router.post('/:id', createOrder)
 // router.put('/:id', updateOrder)

@@ -1,51 +1,57 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Alert, FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import DatePicker from 'react-native-modal-datetime-picker'
-import axios from 'axios'
 import { IOrderList } from '../../../../../Interfaces/IOrderList'
 import { IOrder } from '../../../../../Interfaces/IOrder'
 import { OrderCard } from './OrderCard/OrderCard'
 import { TextField } from '../../../shared/TextField'
-import { getOrderDeliverySumTotal, getOrderPriceSumTotal, SETTINGS } from '../../../Default'
-import { useContextData } from '../../../ContextProvider'
+import { getOrderDeliverySumTotal, getOrderPriceSumTotal, host, port } from '../../../Default'
 import { MaterialIcons } from '@expo/vector-icons'
 import { OrderForm } from './OrderCard/OrderForm/OrderForm'
 import { BottomBar } from '../../BottomBar'
 import { TotalBar } from '../../TotalBar'
+import { useDispatch } from '../../../store/customHooks'
+import { addOrderList, deleteOrderList, fetchOrderLists, selectAllOrderList } from '../../../store/orderListSlice'
+import { useSelector } from 'react-redux'
+import { createOrder } from '../../../store/orderSlice'
+// import { RootStore } from '../../../store'
 
 type IconName = React.ComponentProps<typeof MaterialIcons>["name"]
 
 type BottomData = Array<{ icons: IconName, action: () => void }>
 
 interface IStatusData {
-    key: string, sum : number
-  }
+    key: string, sum: number
+}
 
-  
+
 export const OrderScreen = () => {
 
-    const [startDate, setStartDate] = useState<Date>(new Date('2025-01-14'))
-    const [endDate, setEndDate] = useState<Date>(new Date())
+    const orderLists = useSelector(selectAllOrderList)
+
+    const now = new Date()
+
+    const [startDate, setStartDate] = useState<string>(new Date(now.getFullYear(), now.getMonth(), 1).toISOString())
+    const [endDate, setEndDate] = useState<string>(new Date().toISOString())
     const [showStartDate, setShowStartDate] = useState<boolean>(false)
     const [showEndDate, setShowEndDate] = useState<boolean>(false)
     const [searchText, setSearchText] = useState('')
     const [newOrderList, setNewOrderList] = useState<IOrderList>()
 
-    const { orderLists, setOrderLists } = useContextData()
     const [filteredOrders, setFilteredOrders] = useState<IOrderList[]>(orderLists)
 
     const bottomData: BottomData = [
-            {icons: 'library-add', action: () => handleNewOrder()},
-        ]
+        { icons: 'library-add', action: () => handleNewOrder() },
+    ]
 
     const [openModal, setOpenModal] = useState<boolean>(false)
 
-    const statusData: IStatusData[] = [
-        {key: 'Зак', sum: getOrderPriceSumTotal(orderLists)},
-        {key: 'Дост', sum: getOrderDeliverySumTotal(orderLists)},
-    ]
-    const server = `${SETTINGS.host}:${SETTINGS.port}`
+    const dispatch = useDispatch()
 
+    const statusData: IStatusData[] = [
+        { key: 'Зак', sum: getOrderPriceSumTotal(orderLists) },
+        { key: 'Дост', sum: getOrderDeliverySumTotal(orderLists) },
+    ]
 
     const handleClose = () => {
         setOpenModal(false)
@@ -53,7 +59,7 @@ export const OrderScreen = () => {
     const handlefilterString = (filterString: string) => {
         setSearchText(filterString)
 
-        const filtered = orderLists.filter((order) => 
+        const filtered = orderLists.filter((order) =>
             order.clientName?.toLowerCase().includes(filterString.toLowerCase())
         )
         setFilteredOrders(filtered)
@@ -61,28 +67,14 @@ export const OrderScreen = () => {
 
     //Создание нового документа
     const handleNewOrder = async () => {
-         // Шаблон нового документа с полями по умолчанию. Проверять с моделью базы.
-        const newOrderTemp: IOrder = {
-            // _id: '',
-            orderNum: 0,
-            clientId: '67a7515e37cffbc78d0d7e35',
-            date: new Date(),
-            percent: 15,
-        }
+        // Шаблон нового документа с полями по умолчанию. Проверять с моделью базы.
 
-        try {
-            //Получаем из базы следующий за последним номер накладной
-            const respOrderNum = await axios.get(`${server}/api/order/getOrderNum`)
-            const orderNum: number = respOrderNum.data.orderNum
-            //Добавляем номер накладной к шаблону нового документа
-            const newOrder: IOrder = { ...newOrderTemp, orderNum: orderNum }
-
-            //Создаем новый документ в базе и получаем его экземпляр Order ответом
-            const response = await axios.post(`${server}/api/order/`, newOrder)
-            const createdOrder: IOrder = response.data;
+        const createOrderAction = await dispatch(createOrder())
+        if (createOrder.fulfilled.match(createOrderAction)) {
+            const createdOrder: IOrder = createOrderAction.payload
             
             //Формируем локальный стейт OrderList на базе полученного Order
-            const updatedNewOrderList = {
+            const updatedNewOrderList: IOrderList = {
                 ...createdOrder,
                 discountSum: 0,
                 priceSum: 0,
@@ -90,67 +82,34 @@ export const OrderScreen = () => {
                 _id: createdOrder._id || '',
                 percent: 15
             }
+
+            await dispatch(addOrderList(updatedNewOrderList))
             setNewOrderList(updatedNewOrderList)
 
-
-            if (orderLists) {
-                //Добавляем в список OrderLists локальный стейт OrderList и открываем форму накладной.
-                const updatedOrderLists: IOrderList[] = [...orderLists, updatedNewOrderList];
-                setOrderLists(updatedOrderLists);
-                // console.log('Update Orders:', updatedOrders);
-                setOpenModal(true)
-            }
-
-        } catch (error) {
-            Alert.alert('Ошибка', 'Не удалось создать новый заказ')
+            setOpenModal(true)
         }
+
     }
 
-    const handleDeleteOrder = async (orderId: string) => {
-        try {
-            await axios.delete(`${server}/api/order/${orderId}`)
-            const updateOrders = orderLists.filter(order => order._id !== orderId)
-            setOrderLists(updateOrders)
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response && error.response.data && error.response.data.message) {
-                    Alert.alert('Внимание!!!', `${error.response.data.message}`)
-                }
-            }
-        }
-    }
-
-    useEffect(() => {
-
+    useLayoutEffect(() => {
         const responseDB = async () => {
-            try {
-                //Получение списка документов с суммами. Итоги OrderLists читаются на сервере
-                const response = await axios.get(`${server}/api/order/OrderLists`, {
-                    params: {
-                        startDate: startDate.toISOString(),
-                        endDate: endDate.toISOString()
-                    }
-                })
-                //Обновление глобального стейта OrderLists
-                setOrderLists(response.data)
-                setFilteredOrders(response.data)
-            } catch (error) {
-                Alert.alert("Ошибка загрузки данных")
+            const date = {
+                startDate: startDate,
+                endDate: endDate
             }
+            dispatch(fetchOrderLists(date))
         }
-
         responseDB()
-        //Одновляется при изменении рабочего периода
-    }, [startDate, endDate])
+    }, [startDate, endDate, dispatch])
 
     useEffect(() => {
-
-        const filtered = orderLists.filter((order) => 
+        const filtered = orderLists.filter((order) =>
             order.clientName?.toLowerCase().includes(searchText.toLowerCase())
         )
 
         setFilteredOrders(filtered || [])
-    }, [orderLists])
+        
+    }, [orderLists, searchText])
 
     return (
         <View style={style.contentLayout}>
@@ -166,16 +125,16 @@ export const OrderScreen = () => {
                             <Text
                                 style={style.textDate}
                             >
-                                {startDate.toLocaleDateString()}
+                                {new Date(startDate).toLocaleDateString()}
                             </Text>
                         </Text>
                     </TouchableOpacity>
                     <DatePicker
-                        date={startDate}
+                        date={startDate ? new Date(startDate) : new Date()}
                         isVisible={showStartDate}
                         onConfirm={(newDate) => {
                             setShowStartDate(false)
-                            setStartDate(newDate)
+                            setStartDate(newDate.toISOString())
                         }}
                         onCancel={() => setShowStartDate(false)}
                     />
@@ -190,16 +149,16 @@ export const OrderScreen = () => {
                             <Text
                                 style={style.textDate}
                             >
-                                {endDate.toLocaleDateString()}
+                                {new Date(endDate).toLocaleDateString()}
                             </Text>
                         </Text>
                     </TouchableOpacity>
                     <DatePicker
-                        date={endDate}
+                        date={new Date(endDate)}
                         isVisible={showEndDate}
                         onConfirm={(newDate) => {
                             setShowEndDate(false)
-                            setEndDate(newDate)
+                            setEndDate(newDate.toISOString())
                         }}
                         onCancel={() => setShowEndDate(false)}
                     />
@@ -214,6 +173,7 @@ export const OrderScreen = () => {
                         placeholder='Введите имя клиента'
                         value={searchText}
                         onChangeText={handlefilterString}
+                        type='Date'
                     ></TextField>
                 </View>
             </View>
@@ -223,23 +183,22 @@ export const OrderScreen = () => {
             {/* <ScrollView style={style.scrollLayout}> */}
             {orderLists.length > 0 ? (
                 <View
-                style={style.scrollLayout}
-                
+                    style={style.scrollLayout}
                 >
                     <FlatList
                         data={filteredOrders}
                         renderItem={({ item }) =>
-                            <OrderCard orderList={item} deleteOrder={handleDeleteOrder} />
+                            item ? <OrderCard orderList={item} /> : null
                         }
                         keyExtractor={(item, index) => item._id ?? index.toString()}
                         contentContainerStyle={{ flexGrow: 1, padding: 5 }}
                     />
                 </View>
-            ) : 
+            ) :
                 <View style={style.image}>
-                    <Image 
+                    <Image
                         // style={{alignItems: 'center', justifyContent: 'center' }}
-                        source={ require('../../../../assets/NoItems.png') }
+                        source={require('../../../../assets/NoItems.png')}
                     />
                 </View>
             }
@@ -252,10 +211,10 @@ export const OrderScreen = () => {
                     />
                 </Modal>
                 : null}
-                <View>
-                    <TotalBar statusData={statusData} />
-                    <BottomBar bottomData={bottomData} />
-                </View>
+            <View>
+                <TotalBar statusData={statusData} />
+                <BottomBar bottomData={bottomData} />
+            </View>
         </View >
     )
 }

@@ -1,30 +1,47 @@
-import React, { useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { IOrderList } from '../../../../../../Interfaces/IOrderList'
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { OrderForm } from './OrderForm/OrderForm'
+import { deleteOrderList, fetchOrderLists, selectOrderListById } from '../../../../store/orderListSlice'
+import { useDispatch } from '../../../../store/customHooks'
 
 interface IOrderCardProps {
     orderList: IOrderList
-    deleteOrder: (orderId: string) => void
 }
 
 
-export const OrderCard = ({ orderList, deleteOrder }: IOrderCardProps) => {
+export const OrderCard = ({ orderList }: IOrderCardProps) => {
+
+    const dispatch = useDispatch()
 
     const deliverySumm = Math.round(orderList.priceSum * orderList.percent / 100)
     const paySum = Math.round(orderList.priceSum * (orderList.percent / 100 + 1))
 
     const [openModal, setOpenModal] = useState(false)
-
+    // console.log(`${orderList._id} - ${orderList.orderNum}`);
+    
     const handleClose = () => {
         setOpenModal(false)
     }
 
+    const handleDeleteOrder = async (orderId: string) => {
+        Alert.alert('Удаление заказа!!!', `Вы действительно хотите уделить этот заказ?`, [
+            {
+                text: 'Удалить', style: 'destructive', onPress: async () => {
+                    const resp = await (await dispatch(deleteOrderList(orderId))).payload
+                    if (resp !== orderId) Alert.alert('Предупреждение!!!', resp ? resp.toString() : '')
+                }
+            },
+            { text: 'Отмена', style: 'cancel' },
+        ])
+
+    }
+    
     return (
         <>
             <TouchableOpacity 
                 onPress={() => setOpenModal(true)}
-                onLongPress={() => deleteOrder(orderList._id)}
+                onLongPress={() => handleDeleteOrder(orderList._id)}
             >
                 <View style={style.content}>
                     <View style={style.titleBlock}>

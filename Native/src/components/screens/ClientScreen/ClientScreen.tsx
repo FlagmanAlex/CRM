@@ -5,7 +5,7 @@ import { IClient } from '../../../../../Interfaces/IClient'
 import { ClientCard } from './ClientCard/ClientCard'
 import { ClientForm } from './ClientForm/ClientForm'
 import { TextField } from '../../../shared/TextField'
-import { SETTINGS } from '../../../Default'
+import { host, port } from '../../../Default'
 import { useContextData } from '../../../ContextProvider'
 import { BottomBar } from '../../BottomBar'
 
@@ -17,6 +17,7 @@ interface IClientScreenProps {
 
 export const ClientScreen = ({ select }: IClientScreenProps) => {
 
+  const server = `${host}:${port}`
 
   const { clients, setClients } = useContextData()
 
@@ -78,6 +79,10 @@ export const ClientScreen = ({ select }: IClientScreenProps) => {
   }
 
   const handleDeleteClient = async () => {
+    if (selectClient?._id === '67c9bab271286cadd77e7691') {
+      Alert.alert('Данного клиента удалить нельзя')
+      return
+    }
     Alert.alert('Предупреждение', 'Вы действительно хотите удалить этого клиента?', [
       {
         text: 'Удалить', onPress: async () => {
@@ -123,9 +128,7 @@ export const ClientScreen = ({ select }: IClientScreenProps) => {
     setOpenModal(false)
   }
 
-  const server = `${SETTINGS.host}:${SETTINGS.port}`
-
-  useEffect(() => {
+   useEffect(() => {
     const responsDB = async () => {
       try {
         const response = await axios.get(`${server}/api/client`)

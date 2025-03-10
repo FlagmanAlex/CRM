@@ -49,10 +49,10 @@ export const STYLE = StyleSheet.create({
     },
 })
 
-export const SETTINGS = {
-    host: 'http://192.168.50.2',
-    port: '5001',
-}
+export const host = 'http://192.168.50.2'
+export const port = '5001'
+    // host: 'https://api.mirvitaminok.ru',
+    // port: ''
 
 
 /**
@@ -69,10 +69,10 @@ export const getOrderItemsSumTotal = (orderItems: IOrderItem[]) => {
  * @param orderLists State OrderLists необходим для получения процента документа
  * @returns Процент доставки накладной 
  */
-export const getDeliveryItemsSumTotal = (orderItems: IOrderItem[], orderLists: IOrderList[]) => {
+export const getDeliveryItemsSumTotal = (orderItems: IOrderItem[], orderList: IOrderList) => {
     return orderItems.reduce((total, orderItem) => {
         // Находим соответствующий orderList по orderId
-        const orderList = orderLists.find(orderList => orderList._id === orderItem.orderId);
+        // const orderList = orderLists.find(orderList => orderList._id === orderItem.orderId);
 
         // Проверяем, что orderList существует и percent является числом
         if (orderList && typeof orderList.percent === 'number') {

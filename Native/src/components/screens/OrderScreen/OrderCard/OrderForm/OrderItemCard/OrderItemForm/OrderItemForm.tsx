@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { FormLayout } from '../../../../../../../shared/FormLayout'
 import { ButtonApply } from '../../../../../../../shared/Buttons/ButtonApply'
@@ -6,24 +6,21 @@ import { ButtonDelete } from '../../../../../../../shared/Buttons/ButtonDelete'
 import { ButtonBack } from '../../../../../../../shared/Buttons/ButtonBack'
 import { TextField } from '../../../../../../../shared/TextField'
 import { IOrderItem } from '../../../../../../../../../Interfaces/IOrderItem'
-import axios from 'axios'
-import { SETTINGS, THEME } from '../../../../../../../Default'
+import { THEME } from '../../../../../../../Default'
 import  * as yup  from "yup";
-import { useContextData } from '../../../../../../../ContextProvider'
+import { addOrderItem, deleteOrderItem, updateOrderItem } from '../../../../../../../store/orderItemSlice'
+import { useDispatch } from '../../../../../../../store/customHooks'
 
 interface OICMProps {
     orderItem: IOrderItem
     onClose: () => void
-    deleteItem: (id: string) => Promise<void>
 }
 
 
-export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => {
-
-    const server = `${SETTINGS.host}:${SETTINGS.port}`
+export const OrderItemForm = ({ onClose, orderItem }: OICMProps) => {
 
     const [selectOrderItem, setSelectOrderItem] = useState<IOrderItem>(orderItem)
-    const { orderItems, setOrderItems } = useContextData()
+    const dispatch = useDispatch()
 
     //Состояние для ошибок валидации yup
     const [errors, setErrors] = useState<Record<string, string>>({})
@@ -51,41 +48,32 @@ export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => 
     })
 
     const fields = [
-        { key: "dateTo", placeholder: "Дата доставки", value: new Date(selectOrderItem.dateTo), keyboardType: "number-pad" as const, multiline: false },
-        { key: "item", placeholder: "Наименование  товара", value: selectOrderItem.item, keyboardType: "default" as const, multiline: true },
-        { key: "quantity", placeholder: "Кол-во", value: selectOrderItem.quantity, keyboardType: "number-pad" as const, multiline: false },
-        { key: "discountPrice", placeholder: "Цена со скидкой", value: selectOrderItem.discountPrice, keyboardType: "number-pad" as const, multiline: false },
-        { key: "price", placeholder: "Цена", value: selectOrderItem.price, keyboardType: "number-pad" as const, multiline: false },
-        { key: "url", placeholder: "Ссылка на товар", value: selectOrderItem.url, keyboardType: "url" as const, multiline: true },
+        { key: "item", placeholder: "Наименование  товара", type: 'string',  value: selectOrderItem.item, keyboardType: "default" as const, multiline: true },
+        { key: "quantity", placeholder: "Кол-во", type: 'number', value: selectOrderItem.quantity, keyboardType: "number-pad" as const, multiline: false },
+        { key: "discountPrice", placeholder: "Цена со скидкой", type: 'number', value: selectOrderItem.discountPrice, keyboardType: "number-pad" as const, multiline: false },
+        { key: "price", placeholder: "Цена", type: 'number', value: selectOrderItem.price, keyboardType: "number-pad" as const, multiline: false },
+        { key: "url", placeholder: "Ссылка на товар", type: 'string', value: selectOrderItem.url, keyboardType: "url" as const, multiline: true },
+        { key: "dateTo", placeholder: "Дата доставки", type: 'date', value: selectOrderItem.dateTo, keyboardType: "number-pad" as const, multiline: false },
     ];
 
 
 
     const handleFieldChange = (field: keyof IOrderItem, value: string) => {
-        // console.log(`Обновление ${field} в ${value}`);
-
         setSelectOrderItem((prev) => ({ ...prev, [field]: value }))
     }
 
     const handleSave = async () => {
         try {
-
             //Валидация данных
             await validationSchema.validate(selectOrderItem, { abortEarly: false })
             setErrors({}) // Очистка всех ошибок
 
             if (selectOrderItem._id) {
-                axios.put(`${server}/api/order/items/${selectOrderItem._id}`, selectOrderItem)
-                const updateOrderItems = orderItems.map(orderItem => 
-                    orderItem._id === selectOrderItem._id ? { ...orderItem, ...selectOrderItem } : orderItem
-                )
-                if (!orderItems.some((order) => order._id === selectOrderItem._id)) {
-                    updateOrderItems.push(selectOrderItem);
-                }
-                setOrderItems(updateOrderItems)
+                dispatch(updateOrderItem(selectOrderItem))
             } else {
-                axios.post(`${server}/api/order/items`, selectOrderItem)
+                dispatch(addOrderItem(selectOrderItem))                
             }
+
             onClose()
         } catch (errorValidation) {
             //Обработка ошибок валидации
@@ -103,13 +91,13 @@ export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => 
 
     const handleDelete = () => {
         Alert.alert(
-            "Подтвердите дейтсиве", 
+            "Подтвердите действие", 
             "Вы уверены что хотите удалить карточку товара?",
             [
                 {
                     text: "Удалить",
                     onPress: async () => {
-                        if (orderItem._id) deleteItem(orderItem._id)
+                        if (orderItem._id) dispatch(deleteOrderItem((orderItem._id)))
                             onClose()
                     }
                 },
@@ -127,7 +115,7 @@ export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => 
     }
 
     return (
-        <FormLayout headerText={`Карточка товара/OrderItemsForm`} onClose={onClose}>
+        <FormLayout headerText={`Карточка товара`} onClose={onClose}>
             <View style={style.content}>
                 <View style={style.bodyBlock}>
                     {
@@ -136,6 +124,7 @@ export const OrderItemForm = ({ onClose, orderItem, deleteItem }: OICMProps) => 
                                 <View key={index}>
                                     <TextField
                                         value={field.value}
+                                        type={field.type}
                                         placeholder={field.placeholder}
                                         keyboardType={field.keyboardType}
                                         onChangeText={text => handleFieldChange(field.key as keyof IOrderItem, text)}

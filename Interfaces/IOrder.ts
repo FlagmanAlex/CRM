@@ -1,7 +1,7 @@
 export interface IOrder {
     _id?: string
     orderNum: number
-    date: Date
+    date: string
     clientId: string
     percent: number
 }

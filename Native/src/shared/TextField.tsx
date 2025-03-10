@@ -1,28 +1,37 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, KeyboardType, LogBox, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { SETTINGS, THEME } from '../Default'
+import { THEME } from '../Default'
 import DatePick from 'react-native-modal-datetime-picker'
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
+
 interface TextFieldProps {
     onChangeText: (text: string) => void | undefined
-    value?: string | number | Date | undefined
+    value: string | number | undefined
+    type?: string
     placeholder: string
     keyboardType?: KeyboardType
     multiline?: boolean
 }
 
-export const TextField = ({ onChangeText, value, placeholder, keyboardType = 'default' }: TextFieldProps) => {
+export const TextField = ({ 
+    onChangeText, 
+    value, 
+    type, 
+    placeholder, 
+    keyboardType = 'default' }: TextFieldProps) => {
 
     const [isFocused, setIsFocused] = useState<boolean>(false)
-    const [deliveryDate, setDeliveryDate] = useState<Date>(new Date())
+    const [deliveryDate, setDeliveryDate] = useState<string>(new Date().toISOString())
     const [showDate, setShowDate] = useState<boolean>(false)
 
     const animatedValue = useRef(new Animated.Value(isFocused ? 1 : 0)).current
     
     useEffect(() => {
-        if (value instanceof Date) setDeliveryDate(value)
-        startAnimation(!!value || isFocused)
+        if (value) {
+            if (type === "date") setDeliveryDate(new Date(value).toISOString())
+            startAnimation(!!value || isFocused)
+        }
     }, [value, isFocused])
 
 
@@ -37,25 +46,26 @@ export const TextField = ({ onChangeText, value, placeholder, keyboardType = 'de
 
     return (
         <View style={styles.searchPanel}>
-            {value instanceof Date ? (
+            {type === 'date' ? (
                 <>
                     <TouchableOpacity onPress={() => setShowDate(true)}>
                         <View style={styles.dateContainer}>
                             <FontAwesome name='calendar' size={20} />
-                            <Text style={styles.dateText}>{deliveryDate ? deliveryDate.toLocaleDateString() : ''}</Text>
+                            <Text style={styles.dateText}>{deliveryDate ? new Date(deliveryDate).toLocaleDateString() : ''}</Text>
                         </View>
                     </TouchableOpacity>
                     <DatePick
                         display='calendar'
-                        date={deliveryDate}
+                        date={new Date(deliveryDate)}
                         mode='date'
                         isVisible={showDate}
                         onConfirm={(newDate) => {
                             setShowDate(false)
-                            setDeliveryDate(newDate)
+                            setDeliveryDate(newDate.toISOString())
                             onChangeText(newDate.toISOString())
                         }}
                         onCancel={() => setShowDate(false)}
+                        
                     />
                 </>
             ) 
@@ -113,21 +123,21 @@ export const TextField = ({ onChangeText, value, placeholder, keyboardType = 'de
                                 }
                             }}
                         />
-                            {
-                                value ? (
-                                    <View style={{ padding: 5 }}>
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                onChangeText('')
-                                                setIsFocused(false)
-                                                startAnimation(false)
-                                            }}
-                                        >
-                                            <Ionicons name='close' size={30} />
-                                        </TouchableOpacity>
-                                    </View>
-                                ) : (null)
-                            }
+                        {
+                            value ? (
+                                <View style={{ padding: 5 }}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            onChangeText('')
+                                            setIsFocused(false)
+                                            startAnimation(false)
+                                        }}
+                                    >
+                                        <Ionicons name='close' size={30} />
+                                    </TouchableOpacity>
+                                </View>
+                            ) : (null)
+                        }
                     </View>
                 </>
             )}

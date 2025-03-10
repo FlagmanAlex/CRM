@@ -1,7 +1,12 @@
-import React from 'react'
 import s from './Button.module.css'
 
-export const Button = ({text, onClick, color}) => {
+interface ButtonProps {
+  text: string
+  onClick: () => void
+  color: string
+}
+
+export const Button = ({text, onClick, color}: ButtonProps) => {
   return (
     <div className={s.Button}
         onClick={onClick}
