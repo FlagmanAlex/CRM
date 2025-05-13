@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.orderRoute = void 0;
+const express_1 = __importDefault(require("express"));
+const orderController_1 = require("../controllers/orderController");
+exports.orderRoute = express_1.default.Router();
+exports.orderRoute.get('/getOrderNum/', orderController_1.getNewOrderNum);
+exports.orderRoute.get('/items/', orderController_1.getOrderItems);
+exports.orderRoute.get('/items/:id', orderController_1.getOrderItemsByOrderId);
+exports.orderRoute.post('/items/', orderController_1.newOrderItem);
+exports.orderRoute.put('/items/:id', orderController_1.updateOrderItem);
+exports.orderRoute.delete('/items/:id', orderController_1.deleteOrderItem);
+exports.orderRoute.get('/', orderController_1.getOrders);
+exports.orderRoute.get('/getOrderByClientId/:id', orderController_1.getOrderByClientId);
+exports.orderRoute.get('/orderLists/', orderController_1.getOrderLists);
+exports.orderRoute.get('/:id', orderController_1.getOrder);
+exports.orderRoute.post('/', orderController_1.newOrder);
+exports.orderRoute.delete('/:id', orderController_1.deleteOrder);
+exports.orderRoute.patch('/:id', orderController_1.updateOrder);
