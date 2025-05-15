@@ -1,12 +1,9 @@
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
-import express from 'express'
-import bodyParser from 'body-parser'
+import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
-import { categoryRouter } from './src/routes/categoryRouter';
-import { productRouter } from './src/routes/productRouter';
-import { userRouter } from './src/routes/userRouter'
-import { warehouseRouter } from './src/routes/warehouseRouter'
+import morgan from 'morgan'
+import { mainRouter } from './src/routes'
 
 dotenv.config()
 
@@ -14,20 +11,31 @@ const BD_NAME = process.env.BD_NAME_WAREHOUSE
 const BD_TOKEN = process.env.BD_TOKEN
 const port = process.env.PORT || 3000;
 
-if (BD_TOKEN) mongoose.connect(BD_TOKEN, { dbName: BD_NAME })
+if (!BD_NAME || !BD_TOKEN) {
+    console.error('Необходимы переменные окружения BD_NAME_WAREHOUSE и BD_TOKEN');
+    process.exit(1);
+}
+
+mongoose.connect(BD_TOKEN, { dbName: BD_NAME })
     .then(() => { console.log('Соединение с базой MongoDB прошло успешно') })
     .catch(e => console.log(`Ошибка подключения к MongoDB: ${e.message}`))
 
 const app = express()
 
 app.use(cors())
-app.use(bodyParser.json())
+app.use(express.json())
+app.use(morgan('dev')); // Логирование HTTP-запросов
 
-app.use('/api/categories', categoryRouter);
-app.use('/api/products', productRouter);
-app.use('/api/auth', userRouter)
-app.use('/api/warehouses', warehouseRouter);
+
+//Основные роутеры
+app.use('/api', mainRouter);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack);
+    res.status(500).send('Что-то пошло не так!');
+});
+
 
 app.listen(port, () => {
-    console.log(`Сервер запущен на порту ${port}`);
+    console.log(`Сервер запущен на ${port} порту...`);
 });

@@ -1,12 +1,25 @@
-import express from 'express';
+import { Router } from 'express';
 import { categoryController } from '../controllers/categoryController';
 
-export const categoryRouter = express.Router();
+export const categoryRouter = Router();
 
+// Создание новой категории
 categoryRouter.post('/', categoryController.createCategory);
+
+// Получение списка всех категорий
 categoryRouter.get('/', categoryController.getAllCategories);
-categoryRouter.get('/tree', categoryController.getCategoryTree); // Опционально
+
+// Получение дерева категорий (опционально)
+categoryRouter.get('/tree', categoryController.getCategoryTree);
+
+// Получение категории по ID
 categoryRouter.get('/:id', categoryController.getCategoryById);
-categoryRouter.get('/:id/products', categoryController.getCategoryProducts); // Опционально
+
+// Получение товаров по категории (опционально)
+categoryRouter.get('/:id/products', categoryController.getCategoryProducts);
+
+// Обновление категории
 categoryRouter.patch('/:id', categoryController.updateCategory);
+
+// Удаление категории
 categoryRouter.delete('/:id', categoryController.deleteCategory);

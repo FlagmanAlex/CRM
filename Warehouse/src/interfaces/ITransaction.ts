@@ -6,7 +6,8 @@ export interface ITransaction {
     productId: Types.ObjectId; // Ссылка на товар
     warehouseId: Types.ObjectId; // Ссылка на склад
     batchId: Types.ObjectId; // Ссылка на партию
-    quantity: number; // Количество товара
+    previousQuantity: number; // Количество товара было
+    changeQuantity: number; // Количество товара стало
     transactionDate?: Date; // Дата транзакции
     orderId?: Types.ObjectId; // Ссылка на заказ (если есть)
     userId: Types.ObjectId // Кто выполнил операцию

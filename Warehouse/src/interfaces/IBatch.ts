@@ -5,6 +5,9 @@ export interface IBatch {
     productId: Types.ObjectId
     supplierId: Types.ObjectId
     receiptDate: Date
+    purchasePrice: number
     expirationDate: Date
     quantityReceived: number
+    unitOfMeasure: string
+    status: string
 }

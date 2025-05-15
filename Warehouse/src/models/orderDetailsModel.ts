@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IOrderDetails } from "../interfaces/IOrderDetails";
 
-interface IOrderDetailsModel extends Omit<IOrderDetails, '_id'>, mongoose.Document { }
+export interface IOrderDetailsModel extends Omit<IOrderDetails, '_id'>, mongoose.Document { }
 // Схема для деталей заказа
 const orderDetailsSchema = new Schema<IOrderDetailsModel>({
     orderId: { type: Schema.Types.ObjectId, ref: 'Order', required: true }, // Ссылка на заказ

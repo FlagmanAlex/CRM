@@ -10,7 +10,8 @@ const transactionSchema = new Schema<ITransactionModel>({
     productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true }, // Ссылка на товар
     warehouseId: { type: Schema.Types.ObjectId, ref: 'Warehouse', required: true }, // Ссылка на склад
     batchId: { type: Schema.Types.ObjectId, ref: 'Batch', required: true }, // Ссылка на партию
-    quantity: { type: Number, required: true }, // Количество товара
+    previousQuantity: { type: Number, required: true }, // Количество товара предыдущее
+    changeQuantity: { type: Number, required: true }, // Количество товара новое
     transactionDate: { type: Date, default: Date.now }, // Дата транзакции
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });

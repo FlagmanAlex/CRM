@@ -1,25 +1,32 @@
-import { Router } from 'express';
+import express from 'express';
 import { productController } from '../controllers/productController';
 import { body } from 'express-validator';
 import { adminMiddleware, authMiddleware } from '../middleware/authMiddleware';
 
-export const productRouter = Router();
+export const productRouter = express.Router();
 
+// Создание товара
 productRouter.post('/', [
     body('name').notEmpty(),
     body('price').isFloat({ gt: 0 }),
     body('category').isMongoId(),
     body('supplier').isMongoId()
-], productController.createProduct);                                // Создание товара
-productRouter.get('/', productController.getProducts);              // Получение списка товаров (с фильтрами и пагинацией)
-productRouter.get('/:id', productController.getProductById);        // Получение товара по ID
-productRouter.put('/:id', productController.updateProduct);         // Обновление товара
-productRouter.patch('/:id/archive', 
-    authMiddleware, 
-    adminMiddleware, 
-    productController.archiveProduct
-);                                                                  // Архивирование товара
-productRouter.get('/search', productController.searchProducts);     // Поиск товаров по названию
-productRouter.get('/supplier/:supplierId', 
-    productController.getSupplierProducts
-);                                                                  // Получение товаров поставщика
+], productController.createProduct);
+
+// Получение списка товаров (с фильтрами и пагинацией)
+productRouter.get('/', productController.getProducts);
+
+// Получение товара по ID
+productRouter.get('/:id', productController.getProductById);
+
+// Обновление товара
+productRouter.put('/:id', productController.updateProduct);
+
+// Архивирование товара
+productRouter.patch('/:id/archive', authMiddleware, adminMiddleware, productController.archiveProduct);
+
+// Поиск товаров по названию
+productRouter.get('/search', productController.searchProducts);
+
+// Получение товаров поставщика
+productRouter.get('/supplier/:supplierId', productController.getSupplierProducts);

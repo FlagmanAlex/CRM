@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export interface ISupplier {
-    _id: string;
+    _id?: string;
     name: string;
     contactPerson?: string;
     phone?: string;

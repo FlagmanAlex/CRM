@@ -10,6 +10,8 @@ const customerSchema = new Schema<ICustomerModel>({
     phone: String,
     email: String,
     address: String,
+    gps: String,
+    percent: Number,
     accountManager: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Добавлено поле userId
 });
 

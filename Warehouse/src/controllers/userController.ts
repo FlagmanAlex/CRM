@@ -31,6 +31,7 @@ export const userController = {
 
       // Валидация
       if (!username || !email || !password) {
+        console.log('Все поля обязательны');
         res.status(400).json({ error: 'Все поля обязательны' });
         return
       }
@@ -38,7 +39,8 @@ export const userController = {
       // Проверка уникальности email
       const existingUser = await UserModel.findOne({ email });
       if (existingUser) {
-        res.status(400).json({ error: 'Email уже используется' });
+        console.log('Email уже используется');
+        res.status(400).json({ message: 'Email уже используется' });
         return
       }
 
