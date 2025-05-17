@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose'
-import { IClient } from '../../../Interfaces/IClient'
+import { IClient } from '../../../../Interfaces/IClient'
 
 interface IClientModel extends Omit<IClient, "_id">, Document { }
 

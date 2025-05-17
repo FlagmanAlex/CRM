@@ -4,17 +4,17 @@ import mongoose from 'mongoose'
 
 const headers = {
   "accept": "application/json, text/javascript, */*; q=0.01",
-  "accept-language": "ru,en;q=0.9,ko;q=0.8",
+  "accept-language": "ru,en;q=0.9,ko;q=0.8,cy;q=0.7",
   "content-type": "application/json",
-  "sec-ch-ua": "\"Not A(Brand\";v=\"8\", \"Chromium\";v=\"132\", \"YaBrowser\";v=\"25.2\", \"Yowser\";v=\"2.5\"",
+  "sec-ch-ua": "\"Chromium\";v=\"134\", \"Not:A-Brand\";v=\"24\", \"YaBrowser\";v=\"25.4\", \"Yowser\";v=\"2.5\"",
   "sec-ch-ua-mobile": "?0",
   "sec-ch-ua-platform": "\"Windows\"",
   "sec-fetch-dest": "empty",
   "sec-fetch-mode": "cors",
   "sec-fetch-site": "same-origin",
   "x-requested-with": "XMLHttpRequest",
-  "cookie": "_culture=ru; _ym_uid=1725712585989527291; _ga_ZZNHY97CHR=GS1.1.1740400261.3.0.1740400261.0.0.0; _ga=GA1.2.1123019973.1725712574; _ym_d=1742104219; redirect_uri=/cards/home/wmz/uah; ASP.NET_SessionId=qdpfhwcsqrtitud1lqrasnoz; .Exchanger.Web=6igjtfquEkIBSpT1xh7tQk6oOfxxwNLPQGXEtNHt4qO2a5nV-15Xl3AUftjYyG0gSjfZukYgAUCxAVz8ztEziG5l3uXUcyAftFHyzYFI0TQO4SLbiQctzDzaXf3agIEBHQeDnUpNwb-4rQty3Mn6cxs6XsRWFlARfUvYh5dF9ptq2tqsunuqUkGYR6jCwxDAoQ0SaZ7cD2_Fqpi0ieHuHFWOy3rTngbF2YzE8Odyy4IBN1dDyzs_s2g-p219lNZRQedl3vncX5FMkrx0UVLf1kYefDWEvU6vO3i-K1XO9I1F3_MW8GCsCZDNgDljEnbgdWgD-sfGV-vbmWoz5rT9PBCXYXpphhDsHcfy1DtTmkAH0ZjM0HjP47cj0tcv6vPEzXG5XSeQ-aPeEu35jUkMSsXCBCj0aP9-EWczJoLAY-UWTmDt971PFBdqxhSqCDE3MFGVSdUZ5Gxa_t5TyzClWRW7uQ8HCPkDYdwKJIV9hbWucDXO-pnPyeljE7iItkf1fYjNWA; __RequestVerificationToken=MTk9fWqZfK1IRzuglaQyKbIZLqbEflo2TbzCyHZI_hs6E8rSUAt6Y2fSrv3AkuJrU5Nyoh_sep5-Mqv-g93ra0tgmZ01; _ym_isad=2; _gid=GA1.2.1597687467.1745410055; _gat=1; _ga_769L0F2G95=GS1.2.1745410055.87.0.1745410055.0.0.0",
-  "Referer": "https://exchanger.money/cards/home/wmz/uah",
+  "cookie": "_culture=ru; _ym_uid=1725712585989527291; _ga_ZZNHY97CHR=GS1.1.1740400261.3.0.1740400261.0.0.0; _ga=GA1.2.1123019973.1725712574; _ym_d=1742104219; _gid=GA1.2.772372368.1747334044; _ym_isad=2; ASP.NET_SessionId=qkr2uqlklt3znfy40hlhqn01; .Exchanger.Web=i84pPOjmSj_QcRgq1Ilj0o10Wo202PSusYzUi3Xo5YAhcS56QS5vBsOAr3RVyA3Baq99N_Yl9jJ041m2wmMr7oPAoXjogAxlCSPp7z-LaKnsD3b5mIPHi04JmPHSRkz83NQi3vr00ifBz6Q7emEhRSbKPLsZJYNdGK3iCG7GaPdiNlQ0R2sBSoffGprwXcxTrWhslqMCw2LuVZb7giISBKtDTOcC69kBU0z7iTOtahIMiWL5pa0nk0PL844GsY02obztjJsjh-nSPJrBks5i-EwTWrk0LJopNznzYlcvkQ89_IkyS0pQxxfQIhqXa0JU7lqEWeSbuI3bgHEYOWjI241dgX7U3L0kSkcVrxYG94UNfB1-wn7extr3u40jME0lCHullDBMdHOrJ6wXHh-RyymOeparlpzLdMPW0kjfU32k6G2oDNp4-mxcVCTa2nu9vm0rc6l2dgQ-rFdJR7wpBYJLNVcuhRSHlcICrIF_7YZenqSX; __RequestVerificationToken=xxgtTw6FTGvvL4B-SY42fZNTpGO____gtMPOMkSimiueqE1N1knswMjhsvX_cHGDvixsD6eUk7YHuMqTRdNJCT6fWdc1; redirect_uri=/emoney/home/all/rub-wmt; _ga_769L0F2G95=GS2.2.s1747475012$o106$g1$t1747475433$j0$l0$h0; _gat=1",
+  "Referer": "https://exchanger.money/emoney/home",
   "Referrer-Policy": "strict-origin-when-cross-origin"
 }
 
@@ -136,4 +136,3 @@ async function main() {
 }
 
 main();
-

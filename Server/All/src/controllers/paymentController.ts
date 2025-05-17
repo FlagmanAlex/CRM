@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Payment } from '../models/payment.model';
-import { IPayment, IPaymentClient } from '../../../Interfaces/IPayment';
+import { IPayment, IPaymentClient } from '../../../../Interfaces/IPayment';
 
 export const createPayment = async (req: Request, res: Response) => {
     try {

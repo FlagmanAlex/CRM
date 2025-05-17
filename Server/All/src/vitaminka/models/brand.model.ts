@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import { IBrand } from '../../../../Interfaces/IBrand';
+import { IBrand } from '../../../../../Interfaces/IBrand';
 
 interface Brand extends Omit<IBrand, '_id'>, Document { }
 

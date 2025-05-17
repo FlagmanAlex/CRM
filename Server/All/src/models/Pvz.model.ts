@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose"
-import { IPVZ } from "../../../Interfaces/IPvz"
+import { IPVZ } from "../../../../Interfaces/IPvz"
 
 interface IPVZModel extends IPVZ, Document { }
 

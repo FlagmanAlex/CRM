@@ -32,6 +32,12 @@ const paramsClient: IExcelImportParams = {
     range: 'A1:E500',
     fieldsName: [],
 }
+const paramsCategory: IExcelImportParams = {
+    fileName: '../iHerbРасчетЗатрат.xlsx',
+    sheetName: 'Journal',
+    range: 'A1:V10000',
+    fieldsName: [],
+}
 
 const readData = async () => {
 
@@ -45,7 +51,7 @@ const readData = async () => {
         await mongoose.connect(BD_TOKEN, { dbName: process.env.BD_NAME_WAREHOUSE });
         console.log('Соединение с базой MongoDB прошло успешно');
 
-        // Удаляем все записи из коллекций клиентов и заказов перед вставкой новых данных
+        // Удаляем все записи из всех коллекций
         await UserModel.deleteMany({});
         await SupplierModel.deleteMany({});
         await CustomerModel.deleteMany({});
@@ -80,15 +86,12 @@ const readData = async () => {
 readData()
 
 /**
- * Импорт поставщиков из Excel
+ * Загрузка таблицы HeadJournal
  * @param paramsHeadJournal Параметры таблицы Excel для импорта
- * @param userId Создатель записи
+ * @returns Возвращаем таблицу headJournal с валидными данными
  */
-const addSumpliers = async (paramsHeadJournal: IExcelImportParams, userId: ObjectId) => {
-
-    //Загружаем данные заголовков журнала
+const getHeadJournal = async (paramsHeadJournal: IExcelImportParams) => {
     const hJ = await readExcelRangeToJSon(paramsHeadJournal);
-
     const headJournal = hJ
         .filter(item => item['№ заказа'])
         .map(documment => ({
@@ -106,6 +109,44 @@ const addSumpliers = async (paramsHeadJournal: IExcelImportParams, userId: Objec
             paySum: documment['Сумма оплаты факт']?.result || documment['Сумма оплаты факт'] || 0,
             logisticSum: documment['Логистика RUB']?.result || documment['Логистика RUB'] || 0,
         }));
+
+    return headJournal
+}
+const getClients = async (paramsClient: IExcelImportParams, userId: ObjectId) => {
+    //Загружаем данные клиентов
+    const cl = await readExcelRangeToJSon(paramsClient);
+    const validClients = cl
+        .filter(client => client.name && typeof client.phone !== 'object')
+        .map((client) => (
+            {
+                name: typeof client.name === 'object' ?
+                    client.name.text :
+                    client.name,
+                phone: typeof client.phone === 'object' ?
+                    client.phone.text :
+                    client.phone,
+                address: client.address,
+                gps: client.gps,
+                percent: client.percent,
+                accountManager: userId,
+            }
+        ))
+    return validClients
+
+}
+const getJournal = async (paramsJournal: IExcelImportParams) => {
+    const j = await readExcelRangeToJSon(paramsJournal);
+    return j
+
+}
+/**
+ * Импорт поставщиков из Excel
+ * @param paramsHeadJournal Параметры таблицы Excel для импорта
+ * @param userId Создатель записи
+ */
+const addSumpliers = async (paramsHeadJournal: IExcelImportParams, userId: ObjectId) => {
+
+    const headJournal = await getHeadJournal(paramsHeadJournal)
     const supplier = headJournal.map((item) => (item.supplier))
 
     const uniqueSupplier: { name: string, userId: ObjectId }[] = supplier.reduce((acc, item) => {
@@ -137,23 +178,8 @@ const addSumpliers = async (paramsHeadJournal: IExcelImportParams, userId: Objec
  * @param userId Создатель записи
  */
 const addClients = async (paramsClient: IExcelImportParams, userId: ObjectId) => {
-    //Загружаем данные клиентов
-    const cl = await readExcelRangeToJSon(paramsClient);
-    const validClients = cl
-        .filter(client => client.name && typeof client.phone !== 'object')
-        .map((client) => ({
-            name: typeof client.name === 'object' ?
-                client.name.text :
-                client.name,
-            phone: typeof client.phone === 'object' ?
-                client.phone.text :
-                client.phone,
-            address: client.address,
-            gps: client.gps,
-            percent: client.percent,
-            accountManager: userId,
-        }
-        ))
+
+    const validClients = await getClients(paramsClient, userId)
 
     validClients.map(async (item) => {
         try {
@@ -168,4 +194,11 @@ const addClients = async (paramsClient: IExcelImportParams, userId: ObjectId) =>
         }
     })
 
+}
+/**
+ * Испорт таблицы категорий продуктов
+ * @param paramsJournal Параметры таблицы Excel для импорта
+ * @param userId Создатель записи
+ */
+const addCategoty = async (paramsJournal: IExcelImportParams, userId: ObjectId) => {
 }

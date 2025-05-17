@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { IParfum } from '../../../Interfaces/IProduct'
+import { IParfum } from '../../../../Interfaces/IProduct'
 
 interface IParfumModel extends Omit<IParfum, "_id">, mongoose.Document { }
 //---------------------------------------------

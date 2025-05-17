@@ -15,7 +15,6 @@ import { documentRouter } from './src/vitaminka/importExcel/documentRoute'
 import { brandRouter } from './src/vitaminka/importExcel/brandRoute'
 import { groupRouter } from './src/vitaminka/importExcel/groupRoute'
 import { itemRouter } from './src/vitaminka/importExcel/itemRoute'
-import { productRoute } from '../Warehouse/src/routes/productRouter'
 
 import bodyParser from 'body-parser'
 import cors from 'cors'

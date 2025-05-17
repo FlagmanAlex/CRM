@@ -28,7 +28,6 @@ const documentRoute_1 = require("./src/vitaminka/importExcel/documentRoute");
 const brandRoute_1 = require("./src/vitaminka/importExcel/brandRoute");
 const groupRoute_1 = require("./src/vitaminka/importExcel/groupRoute");
 const itemRoute_1 = require("./src/vitaminka/importExcel/itemRoute");
-const productRoute_1 = require("./Warehouse/routes/productRoute");
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
@@ -47,8 +46,8 @@ if (BD_TOKEN)
         .then(() => { console.log('Соединение с базой MongoDB прошло успешно'); })
         .catch(e => console.log(`Ошибка подключения к MongoDB: ${e.message}`));
 app.use((0, cors_1.default)());
-app.use('/images', express_1.default.static(imagePath));
 app.use(body_parser_1.default.json());
+app.use('/images', express_1.default.static(imagePath));
 app.use('uploads', express_1.default.static('uploads'));
 app.use('/api/unit', unit_1.default);
 app.use('/api/parfum', parfumRoute_1.default);
@@ -62,7 +61,6 @@ app.use('/api/vitaminka/document', documentRoute_1.documentRouter);
 app.use('/api/vitaminka/item', itemRoute_1.itemRouter);
 app.use('/api/vitaminka/brand', brandRoute_1.brandRouter);
 app.use('/api/vitaminka/group', groupRoute_1.groupRouter);
-app.use('/api/warehouse/product', productRoute_1.productRoute);
 const port = process.env.port || 5001;
 app.listen(port, () => console.log(`Сервер запущен на ${port} порту`));
 bot.onText(/\/start (.+)/, (msg, match) => {

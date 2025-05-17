@@ -1,5 +1,5 @@
 import ExcelJS from 'exceljs';
-import { IExcelImportParams } from '../../../Interfaces/IExcelImportParams';
+import { IExcelImportParams } from '../../../../Interfaces/IExcelImportParams';
 
 
 function colToInt(col: string): number {

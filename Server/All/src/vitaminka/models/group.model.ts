@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import { IGroup } from '../../../../Interfaces/IGroup';
+import { IGroup } from '../../../../../Interfaces/IGroup';
 
 interface Group extends Omit<IGroup, '_id'>, Document { }
 

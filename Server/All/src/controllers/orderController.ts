@@ -1,7 +1,7 @@
 import { Order } from '../models/order.model'
 import { OrderItems } from '../models/orderItems.model'
 import { Response, Request } from 'express'
-import { IOrder } from '../../../Interfaces/IOrder'
+import { IOrder } from '../../../../Interfaces/IOrder'
 import mongoose from 'mongoose'
 
 export const getOrderLists = async (req: Request, res: Response) => {
@@ -93,10 +93,10 @@ export const getOrder = async (req: Request, res: Response) => {
         if (orderId) {
             const order = await Order.findById(orderId)
             if (!order) res.status(404).json({ message: "Клиент не найден" })
-                else res.status(200).json(order)
+            else res.status(200).json(order)
         } else console.log('orderId не определен');
-        
-        
+
+
     } catch (error) {
         console.error("Ошибка сервера в getOrder", (error as NodeJS.ErrnoException).message);
         res.status(500).json({ message: 'Ошибка сервера в getOrder' })
@@ -130,13 +130,13 @@ export const updateOrder = async (req: Request, res: Response) => {
                 clientId: req.body.clientId
             }
             const response = await Order.findByIdAndUpdate(
-                req.params.id, 
-                { $set: updateOrder }, 
-                {new: true}
+                req.params.id,
+                { $set: updateOrder },
+                { new: true }
             )
 
             console.log('response: ', response);
-            
+
 
             if (!response) {
                 res.status(404).json({ message: "Order документ не найден" })
@@ -264,7 +264,7 @@ export const getNewOrderNum = async (req: Request, res: Response) => {
     try {
         const maxNumOrder = await Order.findOne().sort({ orderNum: -1 }).limit(1).exec()
         if (maxNumOrder?.orderNum) res.status(201).json({ orderNum: maxNumOrder.orderNum + 1 })
-        else res.status(201).json({orderNum: 1})
+        else res.status(201).json({ orderNum: 1 })
     } catch (error) {
         console.error("Ошибка получения номера документа", error)
         res.status(501).json("Ошибка получения номера документа")

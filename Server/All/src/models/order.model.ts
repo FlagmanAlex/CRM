@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { IOrder } from '../../../Interfaces/IOrder';
+import { IOrder } from '../../../../Interfaces/IOrder';
 
-interface IOrderModel extends Omit<IOrder, "_id">, Document {}
+interface IOrderModel extends Omit<IOrder, "_id">, Document { }
 
 const OrderSchema: Schema = new Schema({
   orderNum: { type: Number, required: true },

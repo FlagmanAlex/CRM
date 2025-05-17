@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { IPayment } from '../../../Interfaces/IPayment'
+import { IPayment } from '../../../../Interfaces/IPayment'
 
 interface IPaymentModel extends Omit<IPayment, "_id">, Document { }
 
