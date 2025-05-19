@@ -15,7 +15,8 @@ declare global {
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
-  
+  console.log(token);
+
   if (token) {
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; role: string };

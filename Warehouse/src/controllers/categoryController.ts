@@ -37,6 +37,7 @@ export const categoryController = {
             });
 
             await category.save();
+
             res.status(201).json(category);
         } catch (error) {
             console.error('Ошибка при создании категории:', error);

@@ -1,23 +1,21 @@
 import { Request, Response } from 'express';
 import { WarehouseModel } from '../models/warehouseModel';
 import { Types } from 'mongoose';
+import { IWarehouse } from '../interfaces/IWarehouse';
 
 export const warehouseController = {
     // Создание склада (только админ)
     async createWarehouse(req: Request, res: Response) {
         try {
-            const { name, location, capacity, manager } = req.body;
+            const body = req.body;
 
-            if (!name) {
+            if (!body.name) {
                 res.status(400).json({ error: 'Название склада обязательно' });
                 return
             }
 
             const warehouse = new WarehouseModel({
-                name,
-                location,
-                capacity,
-                manager: manager || null
+                ...body
             });
 
             await warehouse.save();

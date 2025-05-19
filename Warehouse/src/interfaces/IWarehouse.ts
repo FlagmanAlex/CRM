@@ -5,5 +5,6 @@ export interface IWarehouse {
     name: string;               // Название склада
     location?: string;          // Адрес
     capacity?: number;          // Вместимость (в м³ или усл. единицах)
-    userId?: Types.ObjectId;   // Ответственный менеджер (ссылка на User)
+    description?: string
+    userId: Types.ObjectId;   // Ответственный менеджер (ссылка на User)
 }
